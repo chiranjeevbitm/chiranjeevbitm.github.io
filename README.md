@@ -14,6 +14,13 @@ the first commands.
 - `assets/fonts/` holds Fraunces, Hanken Grotesk and JetBrains Mono (SIL Open Font License)
 - `.nojekyll` tells GitHub Pages to serve the files as they are
 
+## Other pages
+
+| Page | Address | What it is |
+|---|---|---|
+| Arogya Rx website | https://chiranjeevbitm.github.io/arogya-rx/ | Bilingual landing page with the clickable clinic app (sample data) |
+| Arogya Rx clinic demo | https://chiranjeevbitm.github.io/arogya-rx/demo/ | Interactive pitch demo: OPD queue, prescriptions, intake, letterhead, pricing |
+
 ## Adding more pages
 
 Give each new page its own folder so pages never overwrite each other:

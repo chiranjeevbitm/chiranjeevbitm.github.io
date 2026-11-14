@@ -1,0 +1,1148 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Arogya Rx Clinic Demo</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel:wght@400;700;800;900&family=Hind:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: a clinic desk — pitch at the top, a working OPD app in the middle (queue | consult | live paper), then letterhead studio, comparison, pricing, maker credits. */
+:root{
+  --bg:#F2F4F9; --surface:#FFFFFF; --surface-2:#E8ECF5; --line:#D3D9E7; --fg:#131A2C; --muted:#586179;
+  --accent:#2340A6; --accent-ink:#FFFFFF; --accent-soft:#E2E8FB;
+  --good:#1D7650; --good-soft:#DFF2E8; --warn:#9A5B00; --warn-soft:#FCEFD8; --crit:#B2261E; --crit-soft:#FBE2DF;
+  --paper:#FFFFFF; --paper-ink:#1A1F2B; --paper-muted:#5D6372; --paper-line:#D8DCE5;
+  --wa-head:#0B6B5F; --wa-bg:#ECE5DB; --wa-in:#FFFFFF; --wa-out:#D8FBD2; --wa-ink:#111B21;
+  --shadow:0 1px 2px rgba(19,26,44,.06),0 10px 30px rgba(19,26,44,.08);
+  --f-display:'Martel','Noto Serif Devanagari',Georgia,serif;
+  --f-body:'Hind','Noto Sans Devanagari',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --f-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --f-hand:'Caveat','Segoe Print','Bradley Hand',cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1322; --surface:#151C2F; --surface-2:#1C2540; --line:#2A3555; --fg:#E6EAF5; --muted:#9AA4BF;
+  --accent:#8FA7FF; --accent-ink:#0E1322; --accent-soft:#1F2A4F;
+  --good:#5FD39C; --good-soft:#163527; --warn:#F2B35C; --warn-soft:#3A2A12; --crit:#FF8A80; --crit-soft:#41191A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35); color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#0E1322; --surface:#151C2F; --surface-2:#1C2540; --line:#2A3555; --fg:#E6EAF5; --muted:#9AA4BF;
+  --accent:#8FA7FF; --accent-ink:#0E1322; --accent-soft:#1F2A4F;
+  --good:#5FD39C; --good-soft:#163527; --warn:#F2B35C; --warn-soft:#3A2A12; --crit:#FF8A80; --crit-soft:#41191A;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.35); color-scheme:dark;}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.55;}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--surface)}
+.wrap{max-width:1260px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.2}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:var(--surface);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;min-height:60px;flex-wrap:wrap;padding-block:6px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--fg)}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:20px;line-height:1}
+.brand b{font-family:var(--f-display);font-size:19px;font-weight:800;letter-spacing:-.01em}
+.brand small{display:block;font-size:12px;color:var(--muted);line-height:1;margin-top:2px}
+.nav{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.nav a{color:var(--fg);text-decoration:none;padding:6px 10px;border-radius:8px;font-weight:500;font-size:14px}
+.nav a:hover{background:var(--surface-2)}
+.demo-tag{font-size:12px;font-weight:600;color:var(--warn);background:var(--warn-soft);padding:3px 9px;border-radius:99px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);padding:9px 14px;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;text-decoration:none;color:var(--fg);white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.good{background:var(--good);border-color:var(--good);color:var(--surface)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:8px}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.btn svg{width:16px;height:16px;flex:none}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:4px 11px;font-size:13px;cursor:pointer;color:var(--fg)}
+.chip:hover{border-color:var(--accent)}
+.chip.on{background:var(--accent-soft);border-color:var(--accent);color:var(--fg)}
+.chip .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;border-radius:6px;padding:1px 8px;background:var(--surface-2);color:var(--fg)}
+.tag.crit{background:var(--crit-soft);color:var(--crit)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.good{background:var(--good-soft);color:var(--good)}
+.tag.acc{background:var(--accent-soft);color:var(--accent)}
+
+/* hero */
+.hero{padding-block:48px 36px;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:center}
+.hero-kicker{font-family:var(--f-display);font-size:18px;color:var(--accent);font-weight:700}
+.hero h1{font-size:clamp(32px,4.6vw,54px);font-weight:800;letter-spacing:-.02em;margin-top:10px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-sub{font-size:18px;color:var(--muted);max-width:56ch;margin-top:16px}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+.proof{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:32px}
+.proof div{border-top:2px solid var(--accent);padding-top:10px}
+.proof b{display:block;font-family:var(--f-display);font-size:20px;font-weight:800}
+.proof span{font-size:13px;color:var(--muted);line-height:1.35;display:block}
+.hero-paper{position:relative;justify-self:center;width:min(390px,100%)}
+.hero-paper .parchi{transform:rotate(-2.2deg);font-size:10.5px}
+.stamp{position:absolute;right:-6px;top:24px;transform:rotate(8deg);border:2px solid var(--good);color:var(--good);background:var(--surface);padding:6px 12px;border-radius:10px;font-weight:700;font-size:14px;box-shadow:var(--shadow);text-align:center;line-height:1.15}
+.stamp .mono{font-size:22px;display:block}
+
+/* sections */
+section.block{padding-block:56px}
+.sec-head{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.sec-head h2{font-size:clamp(26px,3vw,36px);font-weight:800;letter-spacing:-.01em}
+.sec-head p{color:var(--muted);max-width:62ch;margin-top:6px}
+
+/* app frame */
+.app{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.app-bar{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);flex-wrap:wrap;background:var(--surface)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tab{border:0;background:transparent;padding:7px 12px;border-radius:8px;font-weight:600;cursor:pointer;color:var(--muted);font-size:14px}
+.tab[aria-selected="true"]{background:var(--accent-soft);color:var(--accent)}
+.app-bar .who{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--good);display:inline-block}
+.opd{display:grid;grid-template-columns:232px minmax(0,1fr) 400px;min-height:640px}
+.opd>*{min-width:0}
+.queue{border-right:1px solid var(--line);background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:8px}
+.queue h3{font-family:var(--f-body);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;justify-content:space-between}
+.q-list{display:flex;flex-direction:column;gap:6px}
+.q-item{display:grid;grid-template-columns:34px minmax(0,1fr);gap:8px;align-items:center;padding:8px;border-radius:10px;border:1px solid transparent;background:var(--surface);cursor:pointer;text-align:left;width:100%}
+.q-item:hover{border-color:var(--line)}
+.q-item.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.q-item.done{opacity:.6}
+.q-tok{width:34px;height:34px;border-radius:8px;background:var(--surface-2);display:grid;place-items:center;font-family:var(--f-mono);font-weight:600;font-size:14px}
+.q-item.on .q-tok{background:var(--accent);color:var(--accent-ink)}
+.q-name{display:block;font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-sub{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-add{border:1px dashed var(--line);border-radius:10px;padding:10px;background:var(--surface);display:flex;flex-direction:column;gap:6px}
+.q-add input,.q-add select{width:100%;border:1px solid var(--line);border-radius:7px;padding:5px 8px;background:var(--surface);font-size:13px}
+.q-add .row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+
+.consult{padding:16px 18px 20px;display:flex;flex-direction:column;gap:14px}
+.pt-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start}
+.pt-name{font-family:var(--f-display);font-size:22px;font-weight:800}
+.pt-meta{font-size:13px;color:var(--muted)}
+.pt-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.timer{display:flex;align-items:center;gap:8px;background:var(--surface-2);border-radius:10px;padding:6px 10px}
+.timer .mono{font-size:20px;font-weight:600}
+.timer small{font-size:11px;color:var(--muted);line-height:1.1;display:block;max-width:90px}
+.summary{background:var(--accent-soft);border-radius:10px;padding:10px 12px;font-size:14px}
+.summary b{color:var(--accent)}
+.tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tool{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;gap:10px;align-items:center;background:var(--surface);cursor:pointer;text-align:left;width:100%}
+.tool:hover{border-color:var(--accent)}
+.tool .ic{width:36px;height:36px;border-radius:10px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.tool .ic svg{width:20px;height:20px}
+.tool b{display:block;font-size:14px}
+.tool span{font-size:12px;color:var(--muted);line-height:1.3;display:block}
+.voicebox{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg)}
+.voicebox .t{font-family:var(--f-mono);font-size:13px;line-height:1.6;min-height:44px;white-space:pre-wrap}
+.voicebox .meta{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);margin-top:6px;flex-wrap:wrap}
+.wave{display:inline-flex;gap:2px;align-items:center;height:14px;vertical-align:middle;margin-right:6px}
+.wave i{width:3px;background:var(--crit);border-radius:2px;animation:wv .8s ease-in-out infinite}
+.wave i:nth-child(2){animation-delay:.1s}.wave i:nth-child(3){animation-delay:.2s}.wave i:nth-child(4){animation-delay:.3s}
+@keyframes wv{0%,100%{height:4px}50%{height:14px}}
+.fs{border:0;padding:0;margin:0;min-width:0;display:flex;flex-direction:column;gap:8px}
+.fs-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.fs-h label,.fs-h .lbl{font-size:12px;letter-spacing:.09em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.inp{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:var(--surface);font-size:14px}
+textarea.inp{resize:vertical;min-height:44px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.vitals{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px}
+.vital{display:flex;flex-direction:column;gap:2px}
+.vital span{font-size:11px;color:var(--muted);font-weight:600}
+.vital input{width:100%;border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-family:var(--f-mono);font-size:14px;background:var(--surface)}
+.vital input.warn{border-color:var(--warn);background:var(--warn-soft)}
+.vital input.crit{border-color:var(--crit);background:var(--crit-soft)}
+.vital input.ok{border-color:var(--good)}
+.search{position:relative}
+.drop{position:absolute;left:0;right:0;top:calc(100% + 4px);background:var(--surface);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);z-index:30;max-height:320px;overflow:auto}
+.drop button{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;width:100%;text-align:left;border:0;border-bottom:1px solid var(--line);background:transparent;padding:8px 12px;cursor:pointer}
+.drop button:hover,.drop button.hl{background:var(--accent-soft)}
+.drop .g{font-weight:600;font-size:14px}
+.drop .b{font-size:12px;color:var(--muted)}
+.drop .pr{text-align:right;font-size:12px}
+.drop .pr .ja{color:var(--good);font-weight:600}
+.drop .head{padding:6px 12px;font-size:11px;color:var(--muted);background:var(--bg);text-transform:uppercase;letter-spacing:.08em}
+.meds-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+table.meds{width:100%;border-collapse:collapse;min-width:620px;font-size:13px}
+.meds th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;padding:7px 8px;background:var(--bg);font-weight:600}
+.meds td{padding:6px 8px;border-top:1px solid var(--line);vertical-align:middle}
+.meds td.drug b{display:block;font-size:13px;letter-spacing:.01em}
+.meds td.drug small{color:var(--muted)}
+.meds select,.meds input{border:1px solid var(--line);border-radius:7px;padding:4px 6px;background:var(--surface);font-size:13px}
+.meds input[type=number]{width:56px;font-family:var(--f-mono)}
+.meds tr.flash td{animation:fl 1.2s ease}
+@keyframes fl{0%{background:var(--accent-soft)}100%{background:transparent}}
+.rm{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:18px;line-height:1;padding:4px 6px;border-radius:6px}
+.rm:hover{color:var(--crit);background:var(--crit-soft)}
+.empty-meds{padding:16px;text-align:center;color:var(--muted);font-size:14px}
+.alerts{display:flex;flex-direction:column;gap:6px}
+.alert{display:flex;gap:10px;align-items:flex-start;border-radius:10px;padding:8px 12px;font-size:14px;border:1px solid}
+.alert.crit{background:var(--crit-soft);border-color:var(--crit);color:var(--fg)}
+.alert.warn{background:var(--warn-soft);border-color:var(--warn);color:var(--fg)}
+.alert b{color:inherit}
+.alert .ic{font-weight:800;font-family:var(--f-mono)}
+.alert.crit .ic{color:var(--crit)} .alert.warn .ic{color:var(--warn)}
+.cost{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.cost div span{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:600}
+.cost div b{font-family:var(--f-mono);font-size:18px}
+.cost .save b{color:var(--good)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:14px}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;user-select:none}
+.toggle input{width:36px;height:20px;appearance:none;background:var(--line);border-radius:99px;position:relative;cursor:pointer;transition:.2s}
+.toggle input::after{content:"";position:absolute;width:16px;height:16px;border-radius:50%;background:var(--surface);top:2px;left:2px;transition:.2s}
+.toggle input:checked{background:var(--accent)}
+.toggle input:checked::after{left:18px}
+.flashbox{animation:fl 1.4s ease;border-radius:10px}
+
+.side{border-left:1px solid var(--line);background:var(--surface-2);padding:14px;display:flex;flex-direction:column;gap:10px}
+.side-h{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.side-h b{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* the paper */
+.parchi{--lh:#1d3a8a;background:var(--paper);color:var(--paper-ink);font-family:var(--f-body);font-size:11.5px;line-height:1.42;padding:18px 20px 14px;border-radius:3px;box-shadow:0 1px 2px rgba(0,0,0,.12),0 12px 28px rgba(16,24,48,.14);position:relative;overflow:hidden;display:flex;flex-direction:column;gap:8px;min-height:540px}
+.parchi .wm{position:absolute;left:-20%;right:-20%;top:46%;transform:rotate(-24deg);text-align:center;font-family:var(--f-display);font-weight:800;font-size:2.1em;color:var(--paper-ink);opacity:.055;white-space:nowrap;pointer-events:none;letter-spacing:.04em}
+.lh{border-bottom:2px solid var(--lh);padding-bottom:7px;box-shadow:0 3px 0 -2px var(--lh)}
+.lh.center{text-align:center}
+.lh.left{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+.lh-logo{width:46px;height:46px;border-radius:50%;border:2px solid var(--lh);color:var(--lh);display:grid;place-items:center;font-family:var(--f-display);font-weight:900;font-size:22px}
+.lh-names{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.lh.center .lh-names{justify-content:center}
+.lh-hi{font-family:var(--f-display);font-weight:900;font-size:2.05em;color:var(--lh);line-height:1.05}
+.lh-en{font-family:var(--f-display);font-weight:700;font-size:1.05em;letter-spacing:.14em;text-transform:uppercase;color:var(--lh)}
+.lh-doc{font-weight:700;font-size:1.25em;margin-top:2px}
+.lh-deg{font-size:.95em;color:var(--paper-muted)}
+.lh-contact{font-size:.88em;color:var(--paper-muted);margin-top:2px}
+.prow{display:grid;grid-template-columns:1.7fr 1fr 1.3fr;gap:4px 12px;font-size:.98em}
+.prow div{border-bottom:1px dotted var(--paper-line);padding-bottom:1px;min-width:0;overflow-wrap:anywhere}
+.prow span{color:var(--paper-muted);font-size:.9em;margin-right:4px}
+.pbody{display:grid;grid-template-columns:34% 1fr;gap:12px;flex:1}
+.pleft{border-right:1px solid var(--paper-line);padding-right:10px;display:flex;flex-direction:column;gap:7px}
+.pleft h5,.pright h5{margin:0;font-size:.82em;letter-spacing:.1em;text-transform:uppercase;color:var(--lh);font-weight:700}
+.pleft p{font-size:.95em;white-space:pre-wrap}
+.pv{display:grid;grid-template-columns:auto 1fr;gap:0 6px;font-family:var(--f-mono);font-size:.9em}
+.pv .hi{font-weight:600;text-decoration:underline;text-decoration-style:wavy;text-decoration-color:#B2261E}
+.rxs{font-family:var(--f-display);font-weight:900;font-size:2.2em;color:var(--lh);line-height:1}
+.pmeds{margin:0;padding:0 0 0 1.3em;display:flex;flex-direction:column;gap:6px}
+.pmeds li{padding-left:2px}
+.m-en b{letter-spacing:.02em}
+.m-en small{color:var(--paper-muted)}
+.m-sig{font-family:var(--f-mono);font-size:.9em}
+.m-hi{color:var(--lh);font-size:1em;font-weight:500}
+.padv{font-size:.95em}
+.padv .hi{color:var(--lh)}
+.pfu{display:flex;justify-content:space-between;align-items:end;gap:8px;margin-top:auto}
+.pfu .fu{font-weight:600}
+.sign{text-align:center;min-width:42%}
+.sign .s{font-family:var(--f-hand);font-size:1.9em;color:var(--lh);line-height:1}
+.sign .l{border-top:1px solid var(--paper-ink);padding-top:2px;font-size:.85em}
+.pfoot{border-top:1px solid var(--paper-line);padding-top:4px;font-size:.78em;color:var(--paper-muted);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+
+/* patients & dashboard */
+.pview{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:560px}
+.pview>*{min-width:0}
+.plist{border-right:1px solid var(--line);padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--bg)}
+.pdetail{padding:18px;display:flex;flex-direction:column;gap:16px}
+.timeline{display:flex;flex-direction:column;gap:0;border-left:2px solid var(--line);margin-left:6px}
+.tl{position:relative;padding:0 0 14px 18px}
+.tl::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.tl .d{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.tl b{display:block}
+.tl p{font-size:14px;color:var(--muted)}
+.chart{width:100%;height:auto;display:block}
+.chart .ax{stroke:var(--line)}
+.chart .ln{stroke:var(--accent);fill:none;stroke-width:2.5}
+.chart .ar{fill:var(--accent);opacity:.1}
+.chart .pt{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+.chart .last{fill:var(--accent)}
+.chart text{fill:var(--muted);font-size:12px;font-family:var(--f-mono)}
+.chart text.v{fill:var(--fg);font-weight:600}
+.chart .tgt{stroke:var(--good);stroke-dasharray:4 4}
+.chart text.tg{fill:var(--good)}
+.dash{padding:18px;display:flex;flex-direction:column;gap:18px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kpi{border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi span{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.kpi b{display:block;font-family:var(--f-display);font-size:28px;font-weight:800;line-height:1.2}
+.kpi small{color:var(--muted);font-size:12px}
+.bars{display:flex;flex-direction:column;gap:8px}
+.bar{display:grid;grid-template-columns:140px minmax(0,1fr) 40px;gap:10px;align-items:center;font-size:14px}
+.bar i{display:block;height:12px;border-radius:6px;background:var(--accent);opacity:.85}
+.bar .mono{text-align:right}
+.fulist{display:flex;flex-direction:column}
+.fulist div{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);align-items:center;font-size:14px}
+
+/* intake */
+.intake{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+.drop-zone{border:2px dashed var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:10px;align-items:center;justify-content:center;text-align:center;min-height:220px;background:var(--bg);position:relative}
+.drop-zone.over{border-color:var(--accent);background:var(--accent-soft)}
+.shot{position:relative;width:100%;border-radius:10px;overflow:hidden;background:#fff;border:1px solid var(--line)}
+.shot img,.shot canvas{display:block;width:100%;height:auto}
+.scanline{position:absolute;left:0;right:0;height:36px;background:linear-gradient(180deg,transparent,rgba(35,64,166,.28),transparent);animation:scan 1.4s linear infinite;top:-36px}
+@keyframes scan{to{top:100%}}
+.ex-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:14px}
+.conf{font-family:var(--f-mono);font-size:12px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{border:0;background:var(--surface);padding:6px 12px;cursor:pointer;font-weight:600;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+
+/* studio */
+.studio{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:28px;align-items:start}
+.studio-form{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.studio-form .full{grid-column:1/-1}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;font-weight:600;color:var(--muted)}
+.swatches{display:flex;gap:8px}
+.sw{width:34px;height:34px;border-radius:50%;border:3px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--accent)}
+
+/* compare & pricing */
+.cmp-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.cmp{border-collapse:collapse;width:100%;min-width:680px;font-size:14px}
+.cmp th,.cmp td{padding:11px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.cmp thead th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+.cmp td:last-child,.cmp th:last-child{background:var(--accent-soft)}
+.cmp td:first-child{font-weight:600}
+.y{color:var(--good);font-weight:700}.n{color:var(--crit);font-weight:700}.m{color:var(--warn);font-weight:700}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
+.step{border-top:2px solid var(--fg);padding-top:12px}
+.step .num{font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.step b{display:block;font-family:var(--f-display);font-size:18px;margin:4px 0}
+.step p{color:var(--muted);font-size:14px}
+.plans{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.plan{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.plan.feat{border:2px solid var(--accent);box-shadow:var(--shadow)}
+.plan h3{font-size:20px}
+.price{font-family:var(--f-display);font-size:34px;font-weight:800;line-height:1}
+.price small{font-family:var(--f-body);font-size:14px;font-weight:500;color:var(--muted)}
+.plan ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:5px;font-size:14px}
+.plan .note{font-size:13px;color:var(--muted);margin-top:auto}
+.offer{margin-top:16px;border:1px dashed var(--good);background:var(--good-soft);border-radius:12px;padding:12px 16px;font-size:15px}
+.faq{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+details{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 16px}
+summary{cursor:pointer;font-weight:600}
+details p{margin-top:8px;color:var(--muted);font-size:14px}
+
+/* maker */
+.maker{background:var(--surface);border-top:1px solid var(--line)}
+.maker .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:28px;padding-block:40px 90px}
+.maker h2{font-size:28px}
+.maker p{color:var(--muted);margin-top:8px;max-width:58ch}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.lnk{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;text-decoration:none;color:var(--fg);background:var(--bg);min-width:0}
+.lnk span{font-size:12px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.08em}
+.lnk b{font-size:14px;overflow-wrap:anywhere;user-select:all}
+.lnk .copy{align-self:flex-start;margin-top:4px}
+a.lnk:hover{border-color:var(--accent)}
+
+/* credit chip (watermark) */
+.credit{position:fixed;left:calc(12px + env(safe-area-inset-left,0px));bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:70;font-size:13px}
+.credit>button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:6px 12px 6px 6px;border-radius:99px;box-shadow:var(--shadow);cursor:pointer;font-weight:600}
+.credit .av{width:26px;height:26px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-size:11px;font-weight:700}
+.credit .pop{position:absolute;bottom:calc(100% + 8px);left:0;width:min(300px,calc(100vw - 32px));background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:12px;display:flex;flex-direction:column;gap:6px}
+.credit .pop a,.credit .pop div{font-size:13px;overflow-wrap:anywhere}
+.credit .pop small{color:var(--muted)}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:90;background:rgba(10,14,26,.55);display:flex;align-items:center;justify-content:center;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.sheet{background:var(--surface);border-radius:16px;max-width:980px;width:100%;max-height:100%;overflow:auto;box-shadow:var(--shadow)}
+.sheet-h{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:2}
+.sheet-h h3{font-size:18px}
+.sheet-b{padding:16px}
+.a5{max-width:560px;margin:0 auto}
+.a5 .parchi{font-size:13px;min-height:760px}
+.phone{width:min(340px,100%);margin:0 auto;border-radius:30px;border:9px solid #1b1f2a;background:var(--wa-bg);overflow:hidden;color:var(--wa-ink)}
+.wa-top{background:var(--wa-head);color:#fff;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.wa-top .av{width:32px;height:32px;border-radius:50%;background:#fff;color:var(--wa-head);display:grid;place-items:center;font-weight:800;font-family:var(--f-display)}
+.wa-top b{display:block;font-size:14px}.wa-top small{font-size:11px;opacity:.85}
+.wa-body{padding:12px 10px;display:flex;flex-direction:column;gap:8px;min-height:440px;font-size:13.5px;line-height:1.45}
+.bub{background:var(--wa-out);padding:7px 9px 4px;border-radius:9px;max-width:88%;align-self:flex-end;box-shadow:0 1px 1px rgba(0,0,0,.08)}
+.bub.in{background:var(--wa-in);align-self:flex-start}
+.bub .tm{font-size:10.5px;color:#667781;text-align:right;margin-top:2px}
+.pdf{display:flex;gap:8px;align-items:center;background:rgba(0,0,0,.05);border-radius:7px;padding:8px}
+.pdf .ic{width:30px;height:36px;border-radius:4px;background:#E2463C;color:#fff;font-size:10px;font-weight:700;display:grid;place-items:center}
+.wa-meds{margin:6px 0 0;padding-left:18px}
+.wa-grid{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:95;background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:12px;font-weight:600;box-shadow:var(--shadow);max-width:calc(100vw - 32px);font-size:14px}
+
+/* responsive */
+@media (max-width:1200px){
+  .opd{grid-template-columns:220px minmax(0,1fr)}
+  .side{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}
+  .side .parchi{max-width:560px;margin:0 auto;width:100%}
+}
+@media (max-width:980px){
+  .hero .wrap{grid-template-columns:1fr}
+  .studio{grid-template-columns:1fr}
+  .maker .wrap{grid-template-columns:1fr}
+  .wa-grid{grid-template-columns:1fr}
+  .intake{grid-template-columns:1fr}
+}
+@media (max-width:780px){
+  .opd{grid-template-columns:1fr}
+  .queue{border-right:0;border-bottom:1px solid var(--line)}
+  .q-list{flex-direction:row;overflow-x:auto;padding-bottom:4px}
+  .q-item{min-width:180px}
+  .q-add{display:none}
+  .vitals{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .two,.tools{grid-template-columns:1fr}
+  .proof{grid-template-columns:1fr 1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .pview{grid-template-columns:1fr}
+  .plist{border-right:0;border-bottom:1px solid var(--line)}
+  .plans,.steps,.faq{grid-template-columns:1fr}
+  .studio-form{grid-template-columns:1fr}
+  .links{grid-template-columns:1fr}
+  .bar{grid-template-columns:110px minmax(0,1fr) 36px}
+  .nav{display:none}
+  .cost{grid-template-columns:1fr 1fr 1fr}
+}
+@media (max-width:440px){ .parchi{font-size:10px;padding:14px} .prow{grid-template-columns:1fr 1fr} }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top"><span class="brand-mark">℞</span><span><b>Arogya Rx</b><small>आरोग्य Rx · clinic prescriptions</small></span></a>
+    <span class="demo-tag">Interactive demo · sample data</span>
+    <nav class="nav" aria-label="Sections">
+      <a href="#demo">Live demo</a><a href="#intake-sec">Photo intake</a><a href="#letterhead">Your letterhead</a><a href="#why">Why switch</a><a href="#pricing">Pricing</a><a href="#maker">Contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="hero-kicker">आपकी पर्ची, आपके letterhead पर</div>
+      <h1>Your own prescription pad, <em>printed in 30 seconds</em>, on the patient's WhatsApp in Hindi.</h1>
+      <p class="hero-sub">Arogya Rx is built for busy OPDs in Bihar and UP. One-tap diagnosis templates, generic names in capitals, Jan Aushadhi prices, voice and photo intake. It prints on the letterhead your patients already know.</p>
+      <div class="hero-cta">
+        <a class="btn primary" href="#demo">Try a consultation</a>
+        <a class="btn" href="#letterhead">Put my name on it</a>
+        <a class="btn ghost" href="#intake-sec">Scan an old parchi</a>
+      </div>
+      <div class="proof">
+        <div><b>205,507</b><span>medicines searchable, brand and generic</span></div>
+        <div><b>CAPITALS</b><span>generic names first, as the NMC asks</span></div>
+        <div><b>हिंदी</b><span>dose timings for patients, auto-written</span></div>
+        <div><b>Offline</b><span>prints even when the net drops</span></div>
+      </div>
+    </div>
+    <div class="hero-paper">
+      <div id="heroPaper"></div>
+      <div class="stamp">Parchi ready in<span class="mono" id="heroTime">0:24</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="demo" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Live demo</div>
+        <h2>A real OPD morning, in your browser</h2>
+        <p>Call a token, tap a template or press <b>Speak the consult</b>. Watch the parchi fill in on the right. Try adding <b>Cotrimoxazole</b> for Sita Devi to see the allergy check.</p>
+      </div>
+      <button class="btn" data-act="reset">Reset demo</button>
+    </div>
+    <div class="app" id="app">
+      <div class="app-bar">
+        <div class="tabs" role="tablist">
+          <button class="tab" role="tab" data-view="opd" aria-selected="true">OPD</button>
+          <button class="tab" role="tab" data-view="patients" aria-selected="false">Patients</button>
+          <button class="tab" role="tab" data-view="dash" aria-selected="false">Clinic dashboard</button>
+        </div>
+        <div class="who"><span class="dot"></span><span id="whoName">Dr. Rakesh Sinha</span><span class="mono" id="clock"></span></div>
+      </div>
+      <div id="view-opd" class="opd">
+        <aside class="queue">
+          <h3><span>Today's tokens</span><span class="mono" id="qCount"></span></h3>
+          <div class="q-list" id="qList"></div>
+          <form class="q-add" id="qAdd" autocomplete="off">
+            <div class="eyebrow" style="font-size:11px">Reception · new token</div>
+            <input id="qa-name" placeholder="Patient name" required>
+            <div class="row"><input id="qa-age" type="number" min="0" max="120" placeholder="Age" required><select id="qa-sex"><option>M</option><option>F</option></select></div>
+            <input id="qa-phone" placeholder="Mobile (for WhatsApp)">
+            <input id="qa-co" placeholder="Complaint">
+            <button class="btn sm primary" type="submit">Add token</button>
+          </form>
+        </aside>
+        <div class="consult" id="consult"></div>
+        <aside class="side">
+          <div class="side-h"><b>Live parchi</b><span class="tag acc">updates as you type</span></div>
+          <div id="sidePaper"></div>
+        </aside>
+      </div>
+      <div id="view-patients" class="pview" hidden></div>
+      <div id="view-dash" class="dash" hidden></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="intake-sec" style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Photo intake</div>
+        <h2>Snap the old parchi or lab report. Get structured history.</h2>
+        <p>Patients arrive with folders of handwritten prescriptions and lab slips. Take a phone photo and Arogya Rx pulls out the medicines, doses and lab values. Add them to the patient's history or straight into today's prescription.</p>
+      </div>
+      <div class="seg" role="group" aria-label="Document type">
+        <button data-doc="rx" aria-pressed="true">Old prescription</button>
+        <button data-doc="lab" aria-pressed="false">Lab report</button>
+      </div>
+    </div>
+    <div class="intake">
+      <div class="drop-zone" id="dropZone">
+        <div id="shotWrap" class="shot"></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+          <label class="btn primary" for="fileIn">Upload a photo</label>
+          <input id="fileIn" type="file" accept="image/*" hidden>
+          <button class="btn" data-act="sample-shot">Use sample photo</button>
+        </div>
+        <small style="color:var(--muted)">Drop a JPG or PNG here. On a phone, this opens the camera.</small>
+      </div>
+      <div>
+        <div class="fs-h" style="margin-bottom:8px"><span class="lbl eyebrow">Extracted for <span id="intakeFor"></span></span><span class="tag" id="intakeState">Waiting for photo</span></div>
+        <div id="extract"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="letterhead">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">Letterhead studio</div>
+        <h2>It looks exactly like your parchi</h2>
+        <p>Type your details and the demo above changes too. During setup we rebuild your printed pad: Hindi clinic name, degrees, registration number, timings and colour.</p>
+      </div>
+    </div>
+    <div class="studio">
+      <form class="studio-form" id="studio" autocomplete="off">
+        <div class="field"><label for="lh-doctor">Doctor's name</label><input class="inp" id="lh-doctor" data-lh="doctor"></div>
+        <div class="field"><label for="lh-doctorHi">नाम (हिंदी)</label><input class="inp" id="lh-doctorHi" data-lh="doctorHi"></div>
+        <div class="field full"><label for="lh-degrees">Degrees</label><input class="inp" id="lh-degrees" data-lh="degrees"></div>
+        <div class="field"><label for="lh-clinic">Clinic name</label><input class="inp" id="lh-clinic" data-lh="clinic"></div>
+        <div class="field"><label for="lh-clinicHi">क्लिनिक का नाम (हिंदी)</label><input class="inp" id="lh-clinicHi" data-lh="clinicHi"></div>
+        <div class="field"><label for="lh-reg">Registration no.</label><input class="inp" id="lh-reg" data-lh="reg"></div>
+        <div class="field"><label for="lh-phone">Clinic phone</label><input class="inp" id="lh-phone" data-lh="phone"></div>
+        <div class="field full"><label for="lh-address">Address</label><input class="inp" id="lh-address" data-lh="address"></div>
+        <div class="field full"><label for="lh-timings">Timings</label><input class="inp" id="lh-timings" data-lh="timings"></div>
+        <div class="field"><label>Ink colour</label><div class="swatches" id="swatches"></div></div>
+        <div class="field"><label>Layout</label><div class="seg" id="layoutSeg"><button type="button" data-layout="center">Centred</button><button type="button" data-layout="left">Logo left</button></div></div>
+      </form>
+      <div id="studioPaper"></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="why" style="background:var(--surface);border-block:1px solid var(--line)">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Why switch</div><h2>Faster than the pad, simpler than an EMR</h2></div></div>
+    <div class="cmp-wrap">
+      <table class="cmp">
+        <thead><tr><th>What matters in OPD</th><th>Paper pad</th><th>Typical EMR</th><th>Arogya Rx</th></tr></thead>
+        <tbody>
+          <tr><td>Time per prescription</td><td>1–2 min, handwriting</td><td>2–4 min of typing</td><td><span class="y">~30 sec</span> with templates or voice</td></tr>
+          <tr><td>Looks like your own parchi</td><td class="y">Yes</td><td class="n">Generic layout</td><td class="y">Yes, rebuilt from your pad</td></tr>
+          <tr><td>Legible, generic name in CAPITALS</td><td class="m">Depends on the day</td><td class="m">Often brand-first</td><td class="y">Always</td></tr>
+          <tr><td>Hindi dose timings for the patient</td><td class="m">Spoken, forgotten</td><td class="n">Rarely</td><td class="y">Printed and on WhatsApp</td></tr>
+          <tr><td>Old parchi and lab photos to history</td><td class="n">Folder in the bag</td><td class="m">Upload as a file</td><td class="y">Read and structured</td></tr>
+          <tr><td>Allergy and duplicate-drug checks</td><td class="n">Memory</td><td class="m">Paid tiers</td><td class="y">Built in</td></tr>
+          <tr><td>Works when the internet drops</td><td class="y">Yes</td><td class="n">Usually not</td><td class="y">Yes, syncs later</td></tr>
+          <tr><td>Cost per month</td><td>Pad printing</td><td>₹900–1,500</td><td><b>₹499</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="num">Day 1</div><b>Send a photo of your pad</b><p>We rebuild your letterhead and load templates for your 10 most common diagnoses.</p></div>
+      <div class="step"><div class="num">Day 2</div><b>We set it up at the clinic</b><p>On your laptop, tablet or phone, with a reception login for your compounder. It takes about 20 minutes.</p></div>
+      <div class="step"><div class="num">Day 3</div><b>First 50 patients on Arogya Rx</b><p>A WhatsApp support group for the first two weeks. You can go back to paper any day.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="pricing">
+  <div class="wrap">
+    <div class="sec-head"><div><div class="eyebrow">Pricing</div><h2>Less than one consultation fee a month</h2><p>Prices exclude GST. Yearly plans include on-site setup.</p></div></div>
+    <div class="plans">
+      <div class="plan"><h3>Free</h3><div class="price">₹0</div><ul><li>1 doctor, 100 prescriptions a month</li><li>Standard letterhead</li><li>Print and PDF</li></ul><p class="note">Good for trying it on a slow day.</p></div>
+      <div class="plan feat"><span class="tag acc" style="align-self:flex-start">Most clinics</span><h3>Clinic</h3><div class="price">₹499<small> / month</small></div><div class="mono" style="color:var(--muted);font-size:13px">or ₹4,999 / year</div><ul><li>Unlimited prescriptions</li><li>Your exact letterhead</li><li>Hindi dose instructions</li><li>WhatsApp parchi (500 a month)</li><li>Templates, follow-up reminders</li><li>1 reception login</li></ul><p class="note">For a solo GP seeing 30–80 patients a day.</p></div>
+      <div class="plan"><h3>Clinic Pro</h3><div class="price">₹999<small> / month</small></div><div class="mono" style="color:var(--muted);font-size:13px">or ₹9,999 / year</div><ul><li>Everything in Clinic</li><li>Voice to prescription (Hinglish)</li><li>Photo intake of old Rx and lab reports</li><li>Token screen and billing receipts</li><li>3 staff logins</li></ul><p class="note">For busy OPDs and nursing homes.</p></div>
+    </div>
+    <div class="offer"><b>Founding doctor offer:</b> the first 25 clinics get the Clinic plan at ₹3,999 for the first year, with free setup.</div>
+    <div class="faq" style="margin-top:22px">
+      <details><summary>Is patient data safe?</summary><p>It is stored in India and encrypted. Every staff member has their own login, and every change is logged. Patients give consent before anything is sent on WhatsApp. You can export everything at any time.</p></details>
+      <details><summary>I'm faster with a pen.</summary><p>Most visits match one of your 10 common diagnoses. A template fills the medicines, doses and advice in one tap, and you only change what differs. Voice input does the rest.</p></details>
+      <details><summary>What if the internet goes down?</summary><p>The app keeps working offline and printing still works. Prescriptions sync and WhatsApp messages go out when the connection returns.</p></details>
+      <details><summary>Can my compounder use it?</summary><p>The reception screen only has name, age, phone and complaint. It creates the token and the patient is in your queue.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="maker" id="maker">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow">Built by</div>
+      <h2>Chiranjeev Kumar</h2>
+      <p>GenAI engineer (RAG, agentic systems, document AI) at Deloitte, Bengaluru. I built Arogya Rx for a working clinic in Muzaffarpur, where doctors use it every day. Talk to me about a pilot at your clinic.</p>
+      <p style="font-size:13px">Demo only: every patient, price and doctor shown here is sample data. Medicine prices are indicative.</p>
+    </div>
+    <div class="links">
+      <a class="lnk" href="resume.pdf" target="_blank" rel="noopener"><span>Resume</span><b>Open PDF</b></a>
+      <a class="lnk" href="https://chiranjeev-ai-engineer.vercel.app" target="_blank" rel="noopener"><span>Portfolio</span><b>chiranjeev-ai-engineer.vercel.app</b></a>
+      <a class="lnk" href="https://linkedin.com/in/chiranjeev-kumar-07071997" target="_blank" rel="noopener"><span>LinkedIn</span><b>linkedin.com/in/chiranjeev-kumar-07071997</b></a>
+      <div class="lnk"><span>Gmail</span><b id="mailTxt">chiranjeevkumar47@gmail.com</b><button class="btn sm copy" data-copy="chiranjeevkumar47@gmail.com">Copy email</button></div>
+      <div class="lnk"><span>Phone / WhatsApp</span><b id="phoneTxt">+91 95465 19953</b><button class="btn sm copy" data-copy="+919546519953">Copy number</button></div>
+    </div>
+  </div>
+</footer>
+
+<div class="credit" id="credit">
+  <div class="pop" id="creditPop" hidden>
+    <b>Demo by Chiranjeev Kumar</b>
+    <small>GenAI engineer · Arogya Rx</small>
+    <a href="resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+    <a href="https://chiranjeev-ai-engineer.vercel.app" target="_blank" rel="noopener">Portfolio</a>
+    <a href="https://linkedin.com/in/chiranjeev-kumar-07071997" target="_blank" rel="noopener">LinkedIn</a>
+    <div>chiranjeevkumar47@gmail.com</div>
+    <div>+91 95465 19953</div>
+  </div>
+  <button type="button" id="creditBtn" aria-expanded="false" aria-controls="creditPop"><span class="av">CK</span>Demo by Chiranjeev Kumar</button>
+</div>
+
+<div class="modal" id="modal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="sheet-h"><h3 id="modalTitle"></h3><button class="btn sm" data-act="close">Close</button></div>
+    <div class="sheet-b" id="modalBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- reference data ---------- */
+const DRUGS=[
+ {id:'pcm650',g:'PARACETAMOL',s:'650 mg',f:'tab',b:'Dolo 650',bp:2.0,jp:0.7,cls:'pcm'},
+ {id:'cet10',g:'CETIRIZINE',s:'10 mg',f:'tab',b:'Okacet',bp:1.8,jp:0.3,cls:'ah'},
+ {id:'levo5',g:'LEVOCETIRIZINE',s:'5 mg',f:'tab',b:'Levocet',bp:3.0,jp:0.4,cls:'ah'},
+ {id:'montlevo',g:'MONTELUKAST + LEVOCETIRIZINE',s:'10 mg + 5 mg',f:'tab',b:'Montair-LC',bp:14,jp:3.0,cls:'ah'},
+ {id:'panto40',g:'PANTOPRAZOLE',s:'40 mg',f:'tab',b:'Pan 40',bp:10.3,jp:0.9,cls:'ppi'},
+ {id:'rabdsr',g:'RABEPRAZOLE + DOMPERIDONE SR',s:'20 mg + 30 mg',f:'cap',b:'Rabekind-DSR',bp:12,jp:2.0,cls:'ppi'},
+ {id:'amoxclav',g:'AMOXICILLIN + CLAVULANIC ACID',s:'500 mg + 125 mg',f:'tab',b:'Augmentin 625',bp:22,jp:7,cls:'pen'},
+ {id:'azi500',g:'AZITHROMYCIN',s:'500 mg',f:'tab',b:'Azithral 500',bp:24,jp:6,cls:'mac'},
+ {id:'cefix200',g:'CEFIXIME',s:'200 mg',f:'tab',b:'Taxim-O 200',bp:11,jp:3,cls:'ceph'},
+ {id:'nitro100',g:'NITROFURANTOIN SR',s:'100 mg',f:'cap',b:'Martifur',bp:10,jp:3,cls:'uti'},
+ {id:'cotri',g:'SULFAMETHOXAZOLE + TRIMETHOPRIM',s:'800 mg + 160 mg',f:'tab',b:'Septran DS',bp:3,jp:1,cls:'sulfa'},
+ {id:'ors',g:'ORAL REHYDRATION SALTS',s:'WHO formula',f:'sach',b:'Electral',bp:21,jp:8,cls:'ors'},
+ {id:'amlo5',g:'AMLODIPINE',s:'5 mg',f:'tab',b:'Amlong 5',bp:3.0,jp:0.3,cls:'ccb'},
+ {id:'telmi40',g:'TELMISARTAN',s:'40 mg',f:'tab',b:'Telma 40',bp:8.5,jp:0.8,cls:'arb'},
+ {id:'met500',g:'METFORMIN SR',s:'500 mg',f:'tab',b:'Glycomet SR 500',bp:2.0,jp:0.4,cls:'bg'},
+ {id:'glim1',g:'GLIMEPIRIDE',s:'1 mg',f:'tab',b:'Amaryl 1',bp:6.5,jp:0.5,cls:'su'},
+ {id:'ator10',g:'ATORVASTATIN',s:'10 mg',f:'tab',b:'Atorva 10',bp:8,jp:0.7,cls:'statin'},
+ {id:'thy50',g:'THYROXINE SODIUM',s:'50 mcg',f:'tab',b:'Thyronorm 50',bp:1.8,jp:0.6,cls:'thy'},
+ {id:'salb',g:'SALBUTAMOL INHALER',s:'100 mcg/puff',f:'inh',b:'Asthalin',bp:150,jp:70,cls:'saba'},
+ {id:'ibu400',g:'IBUPROFEN',s:'400 mg',f:'tab',b:'Brufen 400',bp:1.5,jp:0.4,cls:'nsaid'},
+ {id:'diclopcm',g:'DICLOFENAC + PARACETAMOL',s:'50 mg + 325 mg',f:'tab',b:'Dicloran Plus',bp:3.2,jp:0.8,cls:'pcm'},
+ {id:'ond4',g:'ONDANSETRON',s:'4 mg',f:'tab',b:'Emeset 4',bp:6,jp:0.8,cls:'ae'},
+ {id:'dicymef',g:'DICYCLOMINE + MEFENAMIC ACID',s:'10 mg + 250 mg',f:'tab',b:'Meftal-Spas',bp:4.5,jp:1.2,cls:'spas'},
+ {id:'ferro',g:'FERROUS ASCORBATE + FOLIC ACID',s:'100 mg + 1.5 mg',f:'tab',b:'Orofer XT',bp:14,jp:2.5,cls:'iron'},
+ {id:'vitd',g:'CHOLECALCIFEROL',s:'60,000 IU',f:'cap',b:'Uprise D3 60K',bp:32,jp:12,cls:'vitd'},
+ {id:'calc',g:'CALCIUM CARBONATE + VITAMIN D3',s:'500 mg + 250 IU',f:'tab',b:'Shelcal 500',bp:7,jp:1.5,cls:'ca'},
+ {id:'dom10',g:'DOMPERIDONE',s:'10 mg',f:'tab',b:'Domstal',bp:2.5,jp:0.4,cls:'prok'},
+ {id:'coughls',g:'AMBROXOL + LEVOSALBUTAMOL + GUAIPHENESIN',s:'100 ml',f:'syp',b:'Ascoril LS',bp:118,jp:35,cls:'cough'},
+ {id:'bcomp',g:'VITAMIN B-COMPLEX',s:'with B12',f:'cap',b:'Becosules',bp:2.5,jp:0.6,cls:'vit'},
+ {id:'metro400',g:'METRONIDAZOLE',s:'400 mg',f:'tab',b:'Flagyl 400',bp:2,jp:0.5,cls:'nitroimid'}
+];
+const DRUG=Object.fromEntries(DRUGS.map(d=>[d.id,d]));
+const FORM={tab:'TAB.',cap:'CAP.',syp:'SYP.',inh:'INH.',sach:'SACHET'};
+const FREQ={
+ '1-0-0':{en:'morning',hi:'सुबह',n:1},'0-1-0':{en:'afternoon',hi:'दोपहर',n:1},'0-0-1':{en:'night',hi:'रात को',n:1},
+ '1-0-1':{en:'morning & night',hi:'सुबह और रात',n:2},'1-1-1':{en:'thrice daily',hi:'सुबह, दोपहर और रात',n:3},
+ 'SOS':{en:'when needed',hi:'ज़रूरत पड़ने पर',n:1},'Weekly':{en:'once a week',hi:'हफ़्ते में एक बार',n:1/7}
+};
+const TIMING={after:{en:'after food',hi:'खाने के बाद'},before:{en:'before food',hi:'खाने से पहले'},empty:{en:'empty stomach',hi:'खाली पेट'},any:{en:'',hi:''}};
+const ADVICE=[
+ {en:'Rest and plenty of fluids',hi:'आराम करें, खूब पानी पिएँ'},
+ {en:'Low salt, no fried food',hi:'नमक कम, तली चीज़ें बंद'},
+ {en:'Walk 30 minutes daily',hi:'रोज़ 30 मिनट टहलें'},
+ {en:'Avoid spicy food and late dinner',hi:'तीखा खाना और देर रात खाना बंद'},
+ {en:'Steam inhalation twice daily',hi:'दिन में दो बार भाप लें'},
+ {en:'Drink 3 litres of water daily',hi:'रोज़ 3 लीटर पानी पिएँ'},
+ {en:'Check sugar at home every week',hi:'हर हफ़्ते घर पर शुगर जाँचें'},
+ {en:'Iron-rich diet: greens, jaggery, chana',hi:'हरी सब्ज़ी, गुड़, चना खाएँ'}
+];
+const INV=['CBC','Dengue NS1','FBS','PPBS','HbA1c','Lipid profile','S. creatinine','Urine R/M','Urine C/S','TSH','S. ferritin','Chest X-ray','ECG'];
+const COMPLAINTS=['Fever','Cough','Body ache','Headache','Burning urination','Acidity','Giddiness','Weakness','Sneezing','BP check','Sugar follow-up'];
+const TPL={
+ fever:{name:'Viral fever',dx:'Acute febrile illness (viral)',meds:[['pcm650','1-1-1','after',3],['cet10','0-0-1','after',5],['ors','SOS','any',3]],inv:['CBC','Dengue NS1'],adv:[0],fu:3},
+ urti:{name:'URTI / sore throat',dx:'Upper respiratory tract infection',meds:[['azi500','1-0-0','after',3],['levo5','0-0-1','after',5],['pcm650','SOS','after',3]],inv:[],adv:[4,0],fu:5},
+ gast:{name:'Gastritis',dx:'Acid peptic disease',meds:[['panto40','1-0-0','before',14],['dom10','1-0-1','before',5]],inv:[],adv:[3],fu:14},
+ htn:{name:'HTN follow-up',dx:'Essential hypertension',meds:[['telmi40','1-0-0','any',30],['amlo5','0-0-1','any',30]],inv:['S. creatinine','Lipid profile'],adv:[1,2],fu:30},
+ dm:{name:'T2DM follow-up',dx:'Type 2 diabetes mellitus',meds:[['met500','1-0-1','after',30],['glim1','1-0-0','before',30],['ator10','0-0-1','after',30]],inv:['FBS','PPBS','HbA1c'],adv:[2,6],fu:30},
+ uti:{name:'UTI',dx:'Lower urinary tract infection',meds:[['nitro100','1-0-1','after',5],['pcm650','SOS','after',3]],inv:['Urine R/M','Urine C/S'],adv:[5],fu:5},
+ rhin:{name:'Allergic rhinitis',dx:'Allergic rhinitis',meds:[['montlevo','0-0-1','after',10]],inv:[],adv:[4],fu:10},
+ anaemia:{name:'Anaemia',dx:'Iron deficiency anaemia',meds:[['ferro','0-1-0','after',90],['vitd','Weekly','after',56]],inv:['CBC','S. ferritin'],adv:[7],fu:30}
+};
+
+/* ---------- state ---------- */
+const LH0={doctor:'Dr. Rakesh Sinha',doctorHi:'डॉ. राकेश सिन्हा',degrees:'MBBS, MD (General Medicine)',reg:'BCMR 00000 (sample)',clinic:'Sinha Clinic',clinicHi:'सिन्हा क्लिनिक',address:'Club Road, near Kalyani Chowk, Muzaffarpur, Bihar 842001',phone:'+91 90000 00000',timings:'सुबह 8–11 · शाम 5–8 · रविवार बंद',ink:'#1d3a8a',layout:'center'};
+const INKS=[['#1d3a8a','Ink blue'],['#7a1f2b','Maroon'],['#1f5e46','Green'],['#23262e','Black']];
+let uid=0;
+function mkMed(a){const d=DRUG[a[0]];return {uid:++uid,id:a[0],freq:a[1],timing:a[2],days:a[3],dose:a[4]||defDose(d)};}
+function defDose(d){return d.f==='syp'?'10 ml':d.f==='inh'?'2 puffs':d.f==='sach'?'1':'1';}
+function newRx(){return {co:'',v:{bp:'',pulse:'',temp:'',spo2:'',wt:'',grbs:''},dx:'',meds:[],inv:[],adv:[],fu:0,hindi:true};}
+function rxFrom(key,co,v){const t=TPL[key];const r=newRx();r.co=co;Object.assign(r.v,v||{});r.dx=t.dx;r.meds=t.meds.map(mkMed);r.inv=t.inv.slice();r.adv=t.adv.slice();r.fu=t.fu;return r;}
+
+function seed(){
+ uid=0;
+ const P=[
+  {tok:1,name:'Anil Kumar',age:40,sex:'M',phone:'98xxxx2210',uhid:'SC-0388',status:'done',co:'Fever, chills',cond:[],all:[],time:34,rx:rxFrom('fever','Fever with chills, 2 days',{bp:'122/80',pulse:'98',temp:'100.8',spo2:'98',wt:'68'})},
+  {tok:2,name:'Meena Devi',age:58,sex:'F',phone:'97xxxx8812',uhid:'SC-0291',status:'done',co:'BP check',cond:['HTN'],all:[],time:27,rx:rxFrom('htn','Routine BP follow-up',{bp:'144/90',pulse:'80',wt:'64'})},
+  {tok:3,name:'Ramesh Prasad',age:52,sex:'M',phone:'98xxxx4127',uhid:'SC-0412',status:'with',co:'Sugar follow-up, tingling in feet',cond:['T2DM · 6 yrs','HTN'],all:[],
+   summary:'Last visit 14 Aug: HbA1c 7.6%, BP 142/88. On Metformin SR 500 BD and Glimepiride 1 mg OD. Advised a 30-minute daily walk.',
+   trend:{label:'HbA1c (%)',target:7,pts:[['Feb',8.4],['Apr',8.1],['Jun',7.9],['Aug',7.6],['Oct',7.2]]},
+   visits:[['14 Aug 2026','T2DM follow-up','HbA1c 7.6%. Glimepiride added.'],['12 Jun 2026','T2DM follow-up','HbA1c 7.9%. Diet counselling.'],['8 Apr 2026','HTN + T2DM','Telmisartan 40 started.']],
+   voice:{text:'Sugar follow-up. Pairon mein jhunjhuni hai do mahine se. BP 138 by 86, pulse 82, sugar random 186. Type 2 diabetes with early neuropathy. Metformin SR 500 subah shaam khane ke baad, glimepiride 1 mg subah nashte se pehle, atorvastatin 10 raat ko, ek mahina. B-complex ek roz. HbA1c aur lipid profile. Ek mahine baad dikhayein.',
+    tpl:'dm',co:'Sugar follow-up. Tingling in both feet for 2 months.',v:{bp:'138/86',pulse:'82',grbs:'186',wt:'74'},dx:'Type 2 DM with early peripheral neuropathy',extra:[['bcomp','1-0-0','after',30]],inv:['Lipid profile']}},
+  {tok:4,name:'Sita Devi',age:45,sex:'F',phone:'99xxxx3071',uhid:'SC-0517',status:'waiting',co:'Burning urination, 2 days',cond:[],all:['Sulfa'],
+   visits:[['2 Mar 2026','Acid peptic disease','Pantoprazole 14 days.']],
+   voice:{text:'Do din se peshab mein jalan, bukhar nahi. BP 124 by 80, temp 98.8. Lower UTI. Nitrofurantoin 100 subah shaam khane ke baad paanch din, dard ke liye paracetamol zaroorat par. Urine routine aur culture. Teen litre paani roz. Paanch din baad.',
+    tpl:'uti',co:'Burning urination for 2 days. No fever.',v:{bp:'124/80',temp:'98.8',pulse:'84',wt:'58'},dx:'Lower urinary tract infection'}},
+  {tok:5,name:'Mohd. Arif',age:28,sex:'M',phone:'91xxxx6640',uhid:'SC-0533',status:'waiting',co:'Fever 3 days, body ache',cond:[],all:[],
+   voice:{text:'Teen din se bukhar, body ache aur gale mein kharash. BP 118 by 76, pulse 96, temp 101.2, SpO2 98. Viral fever. Paracetamol 650 teen baar khane ke baad teen din, cetirizine raat ko paanch din, ORS. CBC aur dengue NS1. Teen din baad dikhayein.',
+    tpl:'fever',co:'Fever for 3 days with body ache and sore throat.',v:{bp:'118/76',pulse:'96',temp:'101.2',spo2:'98',wt:'66'},dx:'Acute febrile illness (viral)'}},
+  {tok:6,name:'Sunita Kumari',age:34,sex:'F',phone:'70xxxx1185',uhid:'SC-0540',status:'waiting',co:'Weakness, giddiness for a month',cond:[],all:[],
+   voice:{text:'Ek mahine se kamzori aur chakkar. Pallor hai. BP 104 by 68, pulse 92. Iron deficiency anaemia. Ferrous ascorbate folic acid dopahar khane ke baad teen mahine, vitamin D3 60K hafte mein ek baar aath hafte. CBC, serum ferritin. Ek mahine baad.',
+    tpl:'anaemia',co:'Weakness and giddiness for 1 month. Pallor present.',v:{bp:'104/68',pulse:'92',wt:'49'},dx:'Iron deficiency anaemia'}},
+  {tok:7,name:'Rajesh Singh',age:61,sex:'M',phone:'94xxxx9032',uhid:'SC-0102',status:'waiting',co:'BP check, morning headache',cond:['HTN · 9 yrs'],all:['Penicillin'],
+   trend:{label:'Systolic BP (mmHg)',target:140,pts:[['Feb',158],['Apr',150],['Jun',146],['Aug',149],['Oct',152]]},
+   visits:[['20 Aug 2026','HTN follow-up','BP 149/92. Salt counselling.'],['18 Jun 2026','HTN follow-up','BP 146/90.']],
+   voice:{text:'BP check, subah sir dard. BP 152 by 94, pulse 78. Hypertension, uncontrolled. Telmisartan 40 subah, amlodipine 5 raat, ek mahina. Serum creatinine, lipid profile. Namak kam. Ek mahine baad.',
+    tpl:'htn',co:'Morning headache. BP check.',v:{bp:'152/94',pulse:'78',wt:'79'},dx:'Essential hypertension, uncontrolled'}},
+  {tok:8,name:'Pooja Kumari',age:19,sex:'F',phone:'62xxxx4471',uhid:'SC-0545',status:'waiting',co:'Sneezing, runny nose',cond:[],all:[],
+   voice:{text:'Teen din se chheenk aur naak behna, aankhon mein khujli. Temp normal. Allergic rhinitis. Montelukast levocetirizine raat ko das din. Bhaap lena. Das din baad agar zaroorat ho.',
+    tpl:'rhin',co:'Sneezing, running nose and itchy eyes for 3 days.',v:{temp:'98.4',pulse:'76',wt:'52'},dx:'Allergic rhinitis'}}
+ ];
+ P.forEach(p=>{if(!p.rx)p.rx=newRx();if(!p.visits)p.visits=[];p.id='p'+p.tok;});
+ // Ramesh: prefilled working state
+ const r=P[2];r.rx=rxFrom('dm','Sugar follow-up. Tingling in both feet for 2 months.',{bp:'138/86',pulse:'82',spo2:'98',wt:'74',grbs:'186'});
+ r.rx.dx='Type 2 DM with early peripheral neuropathy';r.rx.meds.push(mkMed(['bcomp','1-0-0','after',30]));r.rx.inv.push('Lipid profile');
+ r.start=Date.now()-17000;
+ return {lh:Object.assign({},LH0),patients:P,cur:'p3',view:'opd',doc:'rx',shot:null,extract:null,sent:3};
+}
+let S=seed();
+const cur=()=>S.patients.find(p=>p.id===S.cur);
+
+/* ---------- helpers ---------- */
+const today=new Date();
+const addDays=(n)=>{const d=new Date(today);d.setDate(d.getDate()+n);return d;};
+const fmtD=d=>d.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+const fmtHi=d=>{try{return d.toLocaleDateString('hi-IN',{day:'numeric',month:'long'});}catch(e){return fmtD(d);}};
+const fmtT=s=>{s=Math.max(0,Math.round(s));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+const inr=n=>'₹'+Math.round(n).toLocaleString('en-IN');
+function doseNum(m){return m.dose==='½'?0.5:(parseFloat(m.dose)||1);}
+function qty(m){const d=DRUG[m.id];if(d.f==='syp'||d.f==='inh')return 1;if(m.freq==='Weekly')return Math.ceil(m.days/7);const f=FREQ[m.freq]||{n:1};return Math.ceil(f.n*m.days*doseNum(m));}
+function cost(rx){let b=0,j=0;rx.meds.forEach(m=>{const d=DRUG[m.id];const q=qty(m);b+=q*d.bp;j+=q*d.jp;});return {b,j,s:b-j};}
+function sigCode(m){return /^\d-\d-\d$/.test(m.freq)?m.freq.split('-').join(' – '):m.freq;}
+function doseEn(m,d){if(d.f==='tab')return m.dose+' tab';if(d.f==='cap')return m.dose+' cap';if(d.f==='sach')return '1 sachet in 1 L water';return m.dose;}
+function doseHi(m,d){if(d.f==='tab')return m.dose+' गोली';if(d.f==='cap')return m.dose+' कैप्सूल';if(d.f==='inh')return m.dose.replace('puffs','पफ').replace('puff','पफ');if(d.f==='sach')return '1 पैकेट, 1 लीटर पानी में घोलकर';return m.dose;}
+function daysHi(m){return m.freq==='Weekly'?Math.round(m.days/7)+' हफ़्ते':m.days+' दिन';}
+function daysEn(m){return m.freq==='Weekly'?Math.round(m.days/7)+' weeks':m.days+' days';}
+function vflag(k,val){val=String(val||'').trim();if(!val)return '';
+ if(k==='bp'){const p=val.split('/').map(Number);if(p.length<2||isNaN(p[0])||isNaN(p[1]))return '';if(p[0]>=180||p[1]>=110)return 'crit';if(p[0]>=140||p[1]>=90)return 'warn';if(p[0]<90)return 'warn';return 'ok';}
+ const n=parseFloat(val);if(isNaN(n))return '';
+ if(k==='pulse')return n>120||n<50?'crit':(n>100||n<60?'warn':'ok');
+ if(k==='temp')return n>=103?'crit':(n>=99.5?'warn':'ok');
+ if(k==='spo2')return n<90?'crit':(n<95?'warn':'ok');
+ if(k==='grbs')return n>300||n<70?'crit':(n>180?'warn':'ok');
+ return '';}
+function alertsFor(p){const out=[];const rx=p.rx;
+ rx.meds.forEach(m=>{const d=DRUG[m.id];
+  if(p.all.includes('Sulfa')&&d.cls==='sulfa')out.push(['crit','Allergy: '+p.name+' is allergic to sulfa drugs. '+d.g+' contains sulfamethoxazole. Remove it or confirm.']);
+  if(p.all.includes('Penicillin')&&d.cls==='pen')out.push(['crit','Allergy: '+p.name+' is allergic to penicillin. '+d.g+' is a penicillin. Consider azithromycin or cefixime.']);});
+ const groups={ah:'antihistamines',ppi:'acid reducers',pcm:'paracetamol-containing medicines',nsaid:'painkillers'};
+ Object.keys(groups).forEach(c=>{const ms=rx.meds.filter(m=>DRUG[m.id].cls===c);if(ms.length>1)out.push(['warn','Duplicate: '+ms.length+' '+groups[c]+' ('+ms.map(m=>DRUG[m.id].g).join(', ')+').']);});
+ const seen={};rx.meds.forEach(m=>{if(seen[m.id])out.push(['warn',DRUG[m.id].g+' is listed twice.']);seen[m.id]=1;});
+ if(p.cond.some(c=>c.startsWith('T2DM'))&&rx.meds.some(m=>DRUG[m.id].cls==='nsaid'))out.push(['warn','NSAID in a diabetic patient: check kidney function.']);
+ return out;}
+const ICON={
+ mic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+ cam:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+ print:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>',
+ wa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.4-4.2A8 8 0 1 1 8.6 19z"/><path d="M9 9.5c.5 2.2 2.3 4 4.5 4.5l1.2-1.2 2 .9"/></svg>',
+ next:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>'
+};
+
+/* ---------- the paper ---------- */
+function parchi(p,opt){opt=opt||{};const L=S.lh,rx=p.rx;
+ const v=rx.v;const fuDate=rx.fu?addDays(rx.fu):null;
+ const vit=[['BP',v.bp,'bp','mmHg'],['Pulse',v.pulse,'pulse','/min'],['Temp',v.temp,'temp','°F'],['SpO₂',v.spo2,'spo2','%'],['GRBS',v.grbs,'grbs','mg/dL']].filter(x=>x[1]);
+ const head=L.layout==='left'
+  ?`<div class="lh left"><div class="lh-logo">℞</div><div><div class="lh-names"><span class="lh-hi">${esc(L.clinicHi)}</span><span class="lh-en">${esc(L.clinic)}</span></div><div class="lh-doc">${esc(L.doctor)} <span style="font-weight:500">· ${esc(L.doctorHi)}</span></div><div class="lh-deg">${esc(L.degrees)} · Reg. ${esc(L.reg)}</div><div class="lh-contact">${esc(L.address)} · ${esc(L.phone)}<br>${esc(L.timings)}</div></div></div>`
+  :`<div class="lh center"><div class="lh-names"><span class="lh-hi">${esc(L.clinicHi)}</span><span class="lh-en">| ${esc(L.clinic)}</span></div><div class="lh-doc">${esc(L.doctor)}</div><div class="lh-deg">${esc(L.degrees)} · Reg. No. ${esc(L.reg)}</div><div class="lh-contact">${esc(L.address)} · ${esc(L.phone)}</div><div class="lh-contact">${esc(L.timings)}</div></div>`;
+ const meds=rx.meds.length?rx.meds.map(m=>{const d=DRUG[m.id];const t=TIMING[m.timing]||TIMING.any;
+  return `<li><div class="m-en"><b>${FORM[d.f]} ${esc(d.g)} ${esc(d.s.toUpperCase())}</b> <small>(${esc(d.b)})</small></div><div class="m-sig">${esc(doseEn(m,d))} · ${esc(sigCode(m))} · ${esc([FREQ[m.freq]?FREQ[m.freq].en:'',t.en].filter(Boolean).join(', '))} · ${esc(daysEn(m))}</div>${rx.hindi?`<div class="m-hi">${esc(doseHi(m,d))} · ${esc(FREQ[m.freq]?FREQ[m.freq].hi:'')}${t.hi?' · '+t.hi:''} · ${esc(daysHi(m))}</div>`:''}</li>`;}).join('')
+  :'<li style="list-style:none;color:var(--paper-muted)">Medicines appear here as you add them.</li>';
+ return `<div class="parchi" style="--lh:${esc(L.ink)}">
+  <div class="wm">DEMO · Chiranjeev Kumar</div>
+  ${head}
+  <div class="prow"><div><span>Name</span><b>${esc(p.name)}</b></div><div><span>Age/Sex</span>${esc(p.age)} / ${esc(p.sex)}</div><div><span>Date</span>${fmtD(today)}</div>
+  <div><span>UHID</span>${esc(p.uhid||'—')}</div><div><span>Wt</span>${v.wt?esc(v.wt)+' kg':'—'}</div><div><span>Token</span>${esc(p.tok)}</div></div>
+  <div class="pbody">
+   <div class="pleft">
+    ${rx.co?`<div><h5>C/O</h5><p>${esc(rx.co)}</p></div>`:''}
+    ${vit.length?`<div><h5>O/E</h5><div class="pv">${vit.map(x=>`<span>${x[0]}</span><span class="${vflag(x[2],x[1])==='crit'||vflag(x[2],x[1])==='warn'?'hi':''}">${esc(x[1])} ${x[3]}</span>`).join('')}</div></div>`:''}
+    ${p.all.length?`<div><h5>Allergy</h5><p style="color:#B2261E;font-weight:600">${esc(p.all.join(', '))}</p></div>`:''}
+    ${rx.dx?`<div><h5>Diagnosis</h5><p><b>${esc(rx.dx)}</b></p></div>`:''}
+    ${rx.inv.length?`<div><h5>Investigations</h5><p>${esc(rx.inv.join(', '))}</p></div>`:''}
+   </div>
+   <div class="pright" style="display:flex;flex-direction:column;gap:8px">
+    <div class="rxs">℞</div>
+    <ol class="pmeds">${meds}</ol>
+    ${rx.adv.length?`<div class="padv"><h5>Advice</h5>${rx.adv.map(i=>`<div>• ${esc(ADVICE[i].en)}${rx.hindi?` <span class="hi">/ ${esc(ADVICE[i].hi)}</span>`:''}</div>`).join('')}</div>`:''}
+   </div>
+  </div>
+  <div class="pfu"><div class="fu">${fuDate?`Follow-up: ${fmtD(fuDate)}${rx.hindi?` <span style="color:var(--lh)">(${esc(fmtHi(fuDate))} को दिखाएँ)</span>`:''}`:'&nbsp;'}</div>
+   <div class="sign"><div class="s">${esc(L.doctor.replace(/^Dr\.?\s*/,'Dr. '))}</div><div class="l">${esc(L.doctor)} · ${esc(L.reg)}</div></div></div>
+  <div class="pfoot"><span>Generic names as per NMC guidance · Valid for 7 days</span><span>Made with Arogya Rx</span></div>
+ </div>`;}
+
+/* ---------- queue ---------- */
+function renderQueue(){
+ const P=S.patients;$('#qCount').textContent=P.filter(p=>p.status==='done').length+'/'+P.length+' seen';
+ $('#qList').innerHTML=P.map(p=>`<button class="q-item ${p.id===S.cur?'on':''} ${p.status==='done'?'done':''}" data-open="${p.id}">
+  <span class="q-tok">${p.tok}</span><span style="min-width:0"><span class="q-name">${esc(p.name)} ${p.all.length?'<span class="tag crit" style="font-size:10px">ALLERGY</span>':''}</span>
+  <span class="q-sub">${p.status==='done'?'Done · '+fmtT(p.time):p.status==='with'?'With doctor':esc(p.age+p.sex+' · '+p.co)}</span></span></button>`).join('');}
+
+/* ---------- consultation ---------- */
+function renderConsult(){const p=cur();const el=$('#consult');
+ if(!p){el.innerHTML='<div class="empty-meds">All tokens seen. Add a token at reception, or press Reset demo.</div>';renderSide();return;}
+ const rx=p.rx;
+ el.innerHTML=`
+ <div class="pt-head">
+  <div><div class="pt-name">${esc(p.name)}</div>
+   <div class="pt-meta">${esc(p.age)} yrs · ${p.sex==='M'?'Male':'Female'} · Token ${p.tok} · ${esc(p.uhid)} · ${esc(p.phone)}</div>
+   <div class="pt-tags">${p.cond.map(c=>`<span class="tag acc">${esc(c)}</span>`).join('')}${p.all.map(a=>`<span class="tag crit">Allergic: ${esc(a)}</span>`).join('')}${!p.cond.length&&!p.all.length?'<span class="tag">No known conditions</span>':''}</div></div>
+  <div class="timer" title="Time on this prescription"><span class="mono" id="tmr">0:00</span><small>${p.status==='done'?'final time':'time on this parchi'}</small></div>
+ </div>
+ ${p.summary?`<div class="summary"><b>Summary of past visits:</b> ${esc(p.summary)}</div>`:''}
+ <div class="tools">
+  <button class="tool" data-act="voice" ${p.status==='done'?'disabled':''}><span class="ic">${ICON.mic}</span><span><b>Speak the consult</b><span>Hinglish voice to a draft prescription (simulated)</span></span></button>
+  <button class="tool" data-act="goto-intake"><span class="ic">${ICON.cam}</span><span><b>Scan old parchi or report</b><span>Photo to medicines and lab values</span></span></button>
+ </div>
+ <div class="voicebox" id="voicebox" hidden><div class="t" id="vtext"></div><div class="meta"><span id="vstate"></span><span>Demo: the transcript is scripted. The real app records through the phone mic.</span></div></div>
+ <fieldset class="fs" id="f-co"><div class="fs-h"><label for="in-co">Complaints</label></div>
+  <textarea class="inp" id="in-co" data-bind="co" rows="2" placeholder="Chief complaints">${esc(rx.co)}</textarea>
+  <div class="chips">${COMPLAINTS.map(c=>`<button class="chip" data-addco="${esc(c)}">+ ${esc(c)}</button>`).join('')}</div></fieldset>
+ <fieldset class="fs" id="f-v"><div class="fs-h"><span class="lbl">Vitals</span><span class="tag">flags update as you type</span></div>
+  <div class="vitals">${[['bp','BP','120/80'],['pulse','Pulse','72'],['temp','Temp °F','98.6'],['spo2','SpO₂ %','98'],['grbs','GRBS','110'],['wt','Weight kg','60']].map(x=>`<label class="vital"><span>${x[1]}</span><input id="v-${x[0]}" data-bind="v.${x[0]}" value="${esc(rx.v[x[0]])}" placeholder="${x[2]}" class="${vflag(x[0],rx.v[x[0]])}" inputmode="decimal"></label>`).join('')}</div></fieldset>
+ <fieldset class="fs" id="f-dx"><div class="fs-h"><label for="in-dx">Diagnosis · one-tap templates</label><span class="tag">each fills medicines, tests, advice and follow-up</span></div>
+  <div class="chips">${Object.keys(TPL).map(k=>`<button class="chip" data-tpl="${k}">${esc(TPL[k].name)} <span class="n">${TPL[k].meds.length} Rx</span></button>`).join('')}</div>
+  <input class="inp" id="in-dx" data-bind="dx" value="${esc(rx.dx)}" placeholder="Provisional diagnosis"></fieldset>
+ <fieldset class="fs" id="f-meds"><div class="fs-h"><label for="medSearch">Medicines</label><span class="tag good">Jan Aushadhi price shown</span></div>
+  <div class="search"><input class="inp" id="medSearch" placeholder="Type a generic or brand name, e.g. pan, dolo, telmi" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="drop"><div class="drop" id="drop" hidden></div></div>
+  <div class="meds-wrap" id="medsTable"></div>
+  <div class="alerts" id="alerts"></div>
+  <div class="cost" id="cost"></div></fieldset>
+ <div class="two">
+  <fieldset class="fs" id="f-inv"><div class="fs-h"><span class="lbl">Investigations</span></div><div class="chips">${INV.map(i=>`<button class="chip ${rx.inv.includes(i)?'on':''}" data-inv="${esc(i)}">${esc(i)}</button>`).join('')}</div></fieldset>
+  <fieldset class="fs" id="f-adv"><div class="fs-h"><span class="lbl">Advice (English + हिंदी)</span></div><div class="chips">${ADVICE.map((a,i)=>`<button class="chip ${rx.adv.includes(i)?'on':''}" data-adv="${i}" title="${esc(a.hi)}">${esc(a.en)}</button>`).join('')}</div></fieldset>
+ </div>
+ <fieldset class="fs" id="f-fu"><div class="fs-h"><span class="lbl">Follow-up</span><span class="tag" id="fuTxt">${rx.fu?'Reminder goes on WhatsApp the day before':'No follow-up set'}</span></div>
+  <div class="chips">${[0,3,5,7,10,14,30].map(d=>`<button class="chip ${rx.fu===d?'on':''}" data-fu="${d}">${d?d+' days':'None'}</button>`).join('')}</div></fieldset>
+ <div class="actions">
+  <label class="toggle"><input type="checkbox" id="hindiTgl" ${rx.hindi?'checked':''}> Hindi line for patient</label>
+  <span style="flex:1"></span>
+  <button class="btn" data-act="print">${ICON.print} Print A5</button>
+  <button class="btn" data-act="wa">${ICON.wa} Send on WhatsApp</button>
+  <button class="btn primary" data-act="next" ${p.status==='done'?'disabled':''}>${ICON.next} Save & call next</button>
+ </div>`;
+ renderMeds();renderSide();tick();}
+
+function renderMeds(){const p=cur();if(!p)return;const rx=p.rx;
+ $('#medsTable').innerHTML=rx.meds.length?`<table class="meds"><thead><tr><th>Medicine (generic first)</th><th>Dose</th><th>When</th><th>Food</th><th>Days</th><th>Qty</th><th></th></tr></thead><tbody>
+ ${rx.meds.map(m=>{const d=DRUG[m.id];return `<tr data-uid="${m.uid}" id="mr-${m.uid}"><td class="drug"><b>${FORM[d.f]} ${esc(d.g)}</b><small>${esc(d.s)} · ${esc(d.b)}</small></td>
+  <td>${d.f==='tab'||d.f==='cap'?`<select data-mf="dose" aria-label="Dose">${['½','1','2'].map(x=>`<option ${m.dose===x?'selected':''}>${x}</option>`).join('')}</select>`:`<span class="mono">${esc(m.dose)}</span>`}</td>
+  <td><select data-mf="freq" aria-label="Frequency">${Object.keys(FREQ).map(f=>`<option value="${f}" ${m.freq===f?'selected':''}>${f}</option>`).join('')}</select></td>
+  <td><select data-mf="timing" aria-label="Food">${Object.keys(TIMING).map(t=>`<option value="${t}" ${m.timing===t?'selected':''}>${t==='any'?'—':TIMING[t].en}</option>`).join('')}</select></td>
+  <td><input type="number" min="1" max="365" data-mf="days" value="${m.days}" aria-label="Days"></td>
+  <td class="mono">${qty(m)}</td>
+  <td><button class="rm" data-rm="${m.uid}" aria-label="Remove ${esc(d.g)}">×</button></td></tr>`;}).join('')}</tbody></table>`
+  :'<div class="empty-meds">No medicines yet. Tap a template above or search.</div>';
+ renderAlerts();}
+function renderAlerts(){const p=cur();if(!p)return;
+ $('#alerts').innerHTML=alertsFor(p).map(a=>`<div class="alert ${a[0]}"><span class="ic">!</span><span>${esc(a[1])}</span></div>`).join('');
+ const c=cost(p.rx);
+ $('#cost').innerHTML=`<div><span>Branded</span><b>${inr(c.b)}</b></div><div><span>Jan Aushadhi</span><b>${inr(c.j)}</b></div><div class="save"><span>Patient saves</span><b>${inr(c.s)}</b></div>`;}
+function renderSide(){const p=cur();
+ const html=p?parchi(p):parchi(S.patients[0]);
+ $('#sidePaper').innerHTML=html;$('#heroPaper').innerHTML=html;$('#studioPaper').innerHTML=html;
+ $('#intakeFor').textContent=p?p.name:'—';}
+
+/* ---------- timer ---------- */
+function tick(){const p=cur();const t=$('#tmr');if(!p||!t)return;
+ if(p.status==='done'){t.textContent=fmtT(p.time);return;}
+ if(!p.start)p.start=Date.now();t.textContent=fmtT((Date.now()-p.start)/1000);}
+setInterval(()=>{tick();const c=$('#clock');if(c)c.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});},1000);
+
+/* ---------- actions ---------- */
+function openPatient(id){const prev=cur();if(prev&&prev.status==='with'&&prev.id!==id)prev.status='waiting';
+ S.cur=id;const p=cur();if(p.status==='waiting'){p.status='with';p.start=Date.now();}
+ renderQueue();renderConsult();}
+function applyTpl(k,flash){const p=cur();const t=TPL[k];const rx=p.rx;
+ rx.dx=t.dx;rx.meds=t.meds.map(mkMed);rx.inv=t.inv.slice();rx.adv=t.adv.slice();rx.fu=t.fu;
+ renderConsult();if(flash)['f-dx','f-meds','f-inv','f-adv','f-fu'].forEach(fl);toast(t.name+': '+t.meds.length+' medicines, tests and advice filled');}
+function fl(id){const e=document.getElementById(id);if(!e)return;e.classList.remove('flashbox');void e.offsetWidth;e.classList.add('flashbox');}
+function addDrug(id){const p=cur();const d=DRUG[id];const m=mkMed([id,d.f==='inh'?'SOS':d.f==='syp'?'1-1-1':'1-0-1',d.cls==='ppi'?'before':'after',5]);
+ p.rx.meds.push(m);renderMeds();renderSide();const r=document.getElementById('mr-'+m.uid);if(r)r.classList.add('flash');
+ const a=alertsFor(p).find(x=>x[0]==='crit');if(a)toast('Allergy check triggered');}
+function saveNext(){const p=cur();if(!p)return;
+ if(!p.rx.meds.length){toast('Add at least one medicine first');return;}
+ const crit=alertsFor(p).filter(a=>a[0]==='crit');if(crit.length){toast('Resolve the allergy alert before saving');fl('f-meds');return;}
+ p.time=(Date.now()-(p.start||Date.now()))/1000;p.status='done';S.sent++;
+ $('#heroTime').textContent=fmtT(p.time);
+ const nx=S.patients.find(x=>x.status==='waiting');
+ toast('Saved. Parchi for '+p.name+' took '+fmtT(p.time)+(nx?'. Calling token '+nx.tok:''));
+ if(nx)openPatient(nx.id);else{renderQueue();renderConsult();}}
+
+/* voice simulation */
+let voiceBusy=false;
+function runVoice(){const p=cur();if(!p||voiceBusy||!p.voice)return;voiceBusy=true;
+ const box=$('#voicebox');box.hidden=false;const t=$('#vtext'),st=$('#vstate');t.textContent='';
+ st.innerHTML='<span class="wave"><i></i><i></i><i></i><i></i></span>Listening…';
+ const txt=p.voice.text;let i=0;const step=reduce?txt.length:3;
+ const iv=setInterval(()=>{i+=step;t.textContent=txt.slice(0,i);if(i>=txt.length){clearInterval(iv);st.textContent='Structuring into a prescription…';
+  setTimeout(()=>{const v=p.voice;const rx=p.rx;rx.co=v.co;Object.assign(rx.v,v.v);
+   const t2=TPL[v.tpl];rx.dx=v.dx;rx.meds=t2.meds.map(mkMed).concat((v.extra||[]).map(mkMed));rx.inv=t2.inv.concat(v.inv||[]).filter((x,k,a)=>a.indexOf(x)===k);rx.adv=t2.adv.slice();rx.fu=t2.fu;
+   voiceBusy=false;renderConsult();const b=$('#voicebox');b.hidden=false;$('#vtext').textContent=txt;$('#vstate').innerHTML='<b style="color:var(--good)">Draft ready.</b> Check it, then save. Nothing prints without your confirmation.';
+   ['f-co','f-v','f-dx','f-meds','f-inv','f-adv','f-fu'].forEach(fl);},reduce?0:700);}},reduce?0:22);}
+
+/* search */
+let hl=0;
+function doSearch(q){const dd=$('#drop');const inp=$('#medSearch');q=q.trim().toLowerCase();
+ if(q.length<2){dd.hidden=true;inp.setAttribute('aria-expanded','false');return;}
+ const r=DRUGS.filter(d=>d.g.toLowerCase().includes(q)||d.b.toLowerCase().includes(q)).slice(0,8);
+ hl=0;
+ dd.innerHTML=r.length?`<div class="head">${r.length} of 205,507 in full catalogue · demo list</div>`+r.map((d,i)=>`<button type="button" data-pick="${d.id}" class="${i===0?'hl':''}"><span><span class="g">${FORM[d.f]} ${esc(d.g)} ${esc(d.s)}</span><br><span class="b">${esc(d.b)}${DRUG[d.id].cls==='sulfa'?' · sulfa':''}${DRUG[d.id].cls==='pen'?' · penicillin':''}</span></span><span class="pr">Brand ₹${d.bp}<br><span class="ja">JA ₹${d.jp}</span> / unit</span></button>`).join('')
+  :'<div class="head">No match in the demo list. The full catalogue has 205,507 items.</div>';
+ dd.hidden=false;inp.setAttribute('aria-expanded','true');}
+
+/* ---------- patients view ---------- */
+function trendSVG(tr){const W=560,H=200,l=44,r=20,t=24,b=34;const vals=tr.pts.map(x=>x[1]).concat([tr.target]);
+ let mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);const pad=(mx-mn)*0.2||1;mn-=pad;mx+=pad;
+ const X=i=>l+i*(W-l-r)/(tr.pts.length-1),Y=v=>t+(mx-v)/(mx-mn)*(H-t-b);
+ const pts=tr.pts.map((p,i)=>X(i)+','+Y(p[1])).join(' ');
+ const area=`M${X(0)},${H-b} L`+tr.pts.map((p,i)=>X(i)+','+Y(p[1])).join(' L')+` L${X(tr.pts.length-1)},${H-b} Z`;
+ return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(tr.label)} trend">
+  <line class="ax" x1="${l}" x2="${W-r}" y1="${H-b}" y2="${H-b}"/>
+  <line class="tgt" x1="${l}" x2="${W-r}" y1="${Y(tr.target)}" y2="${Y(tr.target)}"/><text class="tg" x="${W-r}" y="${Y(tr.target)-6}" text-anchor="end">target ${tr.target}</text>
+  <path class="ar" d="${area}"/><polyline class="ln" points="${pts}"/>
+  ${tr.pts.map((p,i)=>`<circle class="${i===tr.pts.length-1?'last':'pt'}" cx="${X(i)}" cy="${Y(p[1])}" r="${i===tr.pts.length-1?5:4}"/><text class="v" x="${X(i)}" y="${Y(p[1])-10}" text-anchor="middle">${p[1]}</text><text x="${X(i)}" y="${H-12}" text-anchor="middle">${p[0]}</text>`).join('')}
+ </svg>`;}
+let pSel='p3',pq='';
+function renderPatients(){const el=$('#view-patients');
+ const list=S.patients.filter(p=>!pq||p.name.toLowerCase().includes(pq)||p.uhid.toLowerCase().includes(pq)||p.phone.includes(pq));
+ const p=S.patients.find(x=>x.id===pSel)||S.patients[0];
+ el.innerHTML=`<div class="plist"><input class="inp" id="pSearch" placeholder="Search name, UHID or phone" value="${esc(pq)}">
+  ${list.map(x=>`<button class="q-item ${x.id===p.id?'on':''}" data-psel="${x.id}"><span class="q-tok">${esc(x.name.split(' ').map(w=>w[0]).join('').slice(0,2))}</span><span style="min-width:0"><span class="q-name">${esc(x.name)}</span><span class="q-sub">${esc(x.uhid)} · ${esc(x.age+x.sex)} · ${x.visits.length+(x.status==='done'?1:0)} visits</span></span></button>`).join('')}</div>
+ <div class="pdetail">
+  <div class="pt-head"><div><div class="pt-name">${esc(p.name)}</div><div class="pt-meta">${esc(p.age)} yrs · ${p.sex==='M'?'Male':'Female'} · ${esc(p.uhid)} · ${esc(p.phone)} · ABHA: not linked</div>
+   <div class="pt-tags">${p.cond.map(c=>`<span class="tag acc">${esc(c)}</span>`).join('')}${p.all.map(a=>`<span class="tag crit">Allergic: ${esc(a)}</span>`).join('')}</div></div>
+   <button class="btn sm primary" data-open="${p.id}" data-goto="opd">Open in OPD</button></div>
+  ${p.trend?`<div><div class="fs-h"><span class="lbl">${esc(p.trend.label)} · last 5 visits</span><span class="tag ${p.trend.pts.at(-1)[1]<=p.trend.target?'good':'warn'}">${p.trend.pts.at(-1)[1]<=p.trend.target?'at target':'above target'}</span></div>${trendSVG(p.trend)}</div>`:'<p style="color:var(--muted)">Trend charts appear once a patient has repeat BP, sugar or HbA1c readings.</p>'}
+  <div><div class="fs-h" style="margin-bottom:8px"><span class="lbl">Visit history</span></div><div class="timeline">
+   ${p.status==='done'||p.status==='with'?`<div class="tl"><div class="d">${fmtD(today)} · today</div><b>${esc(p.rx.dx||'In progress')}</b><p>${esc(p.rx.meds.map(m=>DRUG[m.id].g).join(', ')||'—')}</p></div>`:''}
+   ${p.visits.map(v=>`<div class="tl"><div class="d">${esc(v[0])}</div><b>${esc(v[1])}</b><p>${esc(v[2])}</p></div>`).join('')||'<div class="tl"><b>First visit</b><p>No earlier records. Use photo intake to add old prescriptions.</p></div>'}
+  </div></div>
+ </div>`;}
+
+/* ---------- dashboard ---------- */
+function renderDash(){const P=S.patients;const done=P.filter(p=>p.status==='done');
+ const avg=done.length?done.reduce((s,p)=>s+p.time,0)/done.length:0;
+ const saved=done.reduce((s,p)=>s+cost(p.rx).s,0);
+ const dx={'Viral fever':34,'Hypertension':21,'Type 2 diabetes':19,'Acid peptic disease':15,'URTI':12,'UTI':7};
+ done.forEach(p=>{const k=Object.keys(TPL).find(k=>TPL[k].dx===p.rx.dx);if(k){const n={fever:'Viral fever',htn:'Hypertension',dm:'Type 2 diabetes',gast:'Acid peptic disease',urti:'URTI',uti:'UTI'}[k];if(n)dx[n]++;}});
+ const mx=Math.max.apply(null,Object.values(dx));
+ const fu=[['Ramesh Prasad','T2DM review',1],['Kavita Sharma','Thyroid review',2],['Mahesh Yadav','HTN review',2],['Rubi Khatoon','ANC follow-up',4],['Vinod Paswan','COPD review',5]];
+ $('#view-dash').innerHTML=`
+ <div class="kpis">
+  <div class="kpi"><span>Patients today</span><b class="mono">${done.length}</b><small>of ${P.length} tokens</small></div>
+  <div class="kpi"><span>Avg time per parchi</span><b class="mono">${fmtT(avg)}</b><small>from save to save</small></div>
+  <div class="kpi"><span>Sent on WhatsApp</span><b class="mono">${S.sent}</b><small>with Hindi dose timings</small></div>
+  <div class="kpi"><span>Patients saved today</span><b class="mono">${inr(saved)}</b><small>generic vs branded, indicative</small></div>
+ </div>
+ <div class="two">
+  <div><div class="fs-h" style="margin-bottom:10px"><span class="lbl">Top diagnoses · this month</span></div><div class="bars">${Object.entries(dx).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="bar"><span>${esc(k)}</span><i style="width:${v/mx*100}%"></i><span class="mono">${v}</span></div>`).join('')}</div></div>
+  <div><div class="fs-h" style="margin-bottom:6px"><span class="lbl">Follow-ups due this week</span><span class="tag good">reminders sent automatically</span></div><div class="fulist">${fu.map(f=>`<div><span><b>${esc(f[0])}</b> · ${esc(f[1])}</span><span class="mono">${fmtD(addDays(f[2]))}</span><span class="tag ${f[2]<=2?'warn':''}">${f[2]===1?'tomorrow':'in '+f[2]+' days'}</span></div>`).join('')}</div></div>
+ </div>
+ <p style="color:var(--muted);font-size:13px">Sample clinic data. Monthly diagnosis counts include the patients you save in this demo.</p>`;}
+
+/* ---------- views ---------- */
+function setView(v){S.view=v;document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.view===v?'true':'false'));
+ $('#view-opd').hidden=v!=='opd';$('#view-patients').hidden=v!=='patients';$('#view-dash').hidden=v!=='dash';
+ if(v==='patients')renderPatients();if(v==='dash')renderDash();}
+
+/* ---------- modal ---------- */
+function openModal(title,html){$('#modalTitle').textContent=title;$('#modalBody').innerHTML=html;$('#modal').hidden=false;$('#modal .btn').focus();}
+function closeModal(){$('#modal').hidden=true;}
+function printView(){const p=cur()||S.patients[0];openModal('A5 print preview · '+p.name,`<p style="color:var(--muted);font-size:14px;margin-bottom:12px">In the clinic, this goes straight to your printer on A5 paper, or onto your pre-printed pad with the header switched off.</p><div class="a5">${parchi(p)}</div>`);}
+function waView(){const p=cur()||S.patients[0];const rx=p.rx;const L=S.lh;
+ if(!rx.meds.length){toast('Add medicines first');return;}
+ const fuD=rx.fu?addDays(rx.fu):null;
+ const lines=rx.meds.map(m=>{const d=DRUG[m.id];const t=TIMING[m.timing];return `<li><b>${esc(d.g.split(' ')[0].charAt(0)+d.g.split(' ')[0].slice(1).toLowerCase())}</b>: ${esc(doseHi(m,d))}, ${esc(FREQ[m.freq].hi)}${t.hi?', '+t.hi:''}, ${esc(daysHi(m))}</li>`;}).join('');
+ S.sent++;
+ openModal('WhatsApp preview · '+p.phone,`<div class="wa-grid"><div>
+  <p style="font-size:15px">The patient gets the PDF and a Hindi schedule they can read at home. Follow-up reminders go out automatically the day before.</p>
+  <ul style="color:var(--muted);font-size:14px;margin-top:10px;padding-left:18px;display:flex;flex-direction:column;gap:4px"><li>Sent from your clinic's WhatsApp Business number</li><li>About 15 paise per message</li><li>Only sent after the patient agrees at reception</li></ul>
+  <p style="font-size:13px;color:var(--warn);margin-top:12px">Demo: nothing is actually sent.</p></div>
+  <div class="phone"><div class="wa-top"><span class="av">℞</span><span><b>${esc(L.clinic)}</b><small>Business account</small></span></div>
+  <div class="wa-body">
+   <div class="bub"><div class="pdf"><span class="ic">PDF</span><span><b>Parchi_${esc(p.name.replace(/[^A-Za-z]/g,''))}_${today.getDate()}${today.toLocaleString('en',{month:'short'})}.pdf</b><br><small>1 page · ${esc(L.doctor)}</small></span></div><div class="tm">${new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})} ✓✓</div></div>
+   <div class="bub">नमस्ते ${esc(p.name)} जी, ${esc(L.doctor)} की पर्ची ऊपर है। दवा ऐसे लें:<ul class="wa-meds">${lines}</ul>${rx.adv.length?'<div style="margin-top:6px">सलाह: '+rx.adv.map(i=>esc(ADVICE[i].hi)).join(', ')+'</div>':''}${fuD?`<div style="margin-top:6px"><b>${esc(fmtHi(fuD))}</b> को दोबारा दिखाएँ। 1 लिखकर भेजें, टोकन बुक हो जाएगा।</div>`:''}<div class="tm">✓✓</div></div>
+   <div class="bub in">1<div class="tm">now</div></div>
+   <div class="bub">टोकन बुक हो गया ✔ ${fuD?esc(fmtHi(fuD))+', सुबह 8 बजे के बाद।':''}<div class="tm">✓✓</div></div>
+  </div></div></div>`);}
+
+/* ---------- intake ---------- */
+const SAMPLE={
+ rx:{title:'Handwritten prescription · 3 Mar 2026',lines:['Dr. S. N. Jha  MBBS','Name: '+'—','C/O cough, fever x 4 days','Rx','1) T. Azee 500   1-0-0 x 3d','2) T. Pan D       1-0-0 BF x 10d','3) Syp Ascoril LS  2 tsp TDS','4) T. Dolo 650   SOS','Adv: CBC, steam'],
+  items:[['Medicine','AZITHROMYCIN 500 mg · 1-0-0 · 3 days',96,'azi500'],['Medicine','PANTOPRAZOLE + DOMPERIDONE · 1-0-0 before food · 10 days',91,'rabdsr'],['Medicine','AMBROXOL + LEVOSALBUTAMOL syrup · 10 ml thrice daily',88,'coughls'],['Medicine','PARACETAMOL 650 mg · when needed',97,'pcm650'],['Complaint','Cough and fever for 4 days',93,null],['Test','CBC',90,null]]},
+ lab:{title:'Lab report · Shree Diagnostics · 22 Oct 2026',lines:['SHREE DIAGNOSTICS, MUZAFFARPUR','Patient: —','Test            Result   Ref range','Haemoglobin     9.1 g/dL  12-15','HbA1c           7.2 %     <5.7','FBS             132 mg/dL 70-100','S. Creatinine   1.1 mg/dL 0.6-1.2','TSH             3.4 mIU/L 0.4-4.0'],
+  items:[['Lab','Haemoglobin 9.1 g/dL · low (12–15)',98,'low'],['Lab','HbA1c 7.2% · high (<5.7)',97,'high'],['Lab','FBS 132 mg/dL · high (70–100)',96,'high'],['Lab','S. creatinine 1.1 mg/dL · normal',95,'ok'],['Lab','TSH 3.4 mIU/L · normal',94,'ok']]}
+};
+function sampleCanvas(kind){const c=document.createElement('canvas');c.width=640;c.height=kind==='rx'?520:440;const g=c.getContext('2d');
+ g.fillStyle='#fbfaf6';g.fillRect(0,0,c.width,c.height);
+ const s=SAMPLE[kind];const p=cur();
+ if(kind==='rx'){g.strokeStyle='#c9cfdc';g.lineWidth=1;for(let y=110;y<c.height;y+=42){g.beginPath();g.moveTo(24,y);g.lineTo(616,y);g.stroke();}
+  g.fillStyle='#7a1f2b';g.font='700 26px Georgia, serif';g.fillText('Jha Clinic',24,46);g.font='15px Georgia, serif';g.fillText('Dr. S. N. Jha, MBBS · Sitamarhi',24,72);
+  g.fillStyle='#22306b';g.font='500 30px Caveat, "Segoe Print", cursive';
+  const L=s.lines.slice(2);L[0]=L[0];let y=104;
+  g.fillText((p?p.name:'Patient')+'   '+(p?p.age+'/'+p.sex:''),40,y);y+=42;
+  L.forEach((ln,i)=>{g.save();g.translate(40+(i%2)*4,y);g.rotate((i%3-1)*0.006);g.fillText(ln,0,0);g.restore();y+=42;});
+ }else{g.fillStyle='#0f3d6e';g.fillRect(0,0,c.width,64);g.fillStyle='#fff';g.font='700 22px Arial, sans-serif';g.fillText('SHREE DIAGNOSTICS',24,40);g.font='13px Arial';g.fillText('NABL lab · Muzaffarpur',430,40);
+  g.fillStyle='#222';g.font='15px Arial, sans-serif';g.fillText('Patient: '+(p?p.name+'  '+p.age+'/'+p.sex:'—')+'        Date: 22-10-2026',24,96);
+  g.font='600 15px "Courier New", monospace';let y=140;g.fillText(s.lines[2],24,y);g.fillRect(24,y+8,592,1);y+=40;g.font='15px "Courier New", monospace';
+  s.lines.slice(3).forEach(ln=>{g.fillText(ln,24,y);y+=38;});g.font='italic 12px Arial';g.fillStyle='#777';g.fillText('Sample report for demo only',24,c.height-18);
+  g.save();g.translate(c.width/2,c.height/2);g.rotate(-0.02);g.restore();}
+ return c;}
+function showShot(src){const w=$('#shotWrap');w.innerHTML='';if(src instanceof HTMLCanvasElement)w.appendChild(src);else{const im=new Image();im.alt='Uploaded document photo';im.src=src;w.appendChild(im);}
+ const sl=document.createElement('div');sl.className='scanline';w.appendChild(sl);
+ $('#intakeState').className='tag acc';$('#intakeState').textContent='Reading…';
+ $('#extract').innerHTML='<p style="color:var(--muted)">Finding text, separating medicines from notes, matching names to the catalogue…</p>';
+ setTimeout(()=>{sl.remove();renderExtract();},reduce?0:1500);}
+function renderExtract(user){const s=SAMPLE[S.doc];const p=cur();
+ $('#intakeState').className='tag good';$('#intakeState').textContent='Done · '+s.items.length+' items';
+ $('#extract').innerHTML=`<div style="font-weight:600;margin-bottom:4px">${esc(s.title)}</div>
+ ${S.userShot?'<p style="font-size:13px;color:var(--warn);margin-bottom:6px">Demo: your photo is shown, but the result below is a sample. The real app reads it with document AI.</p>':''}
+ ${s.items.map((it,i)=>`<div class="ex-row"><span class="tag ${it[0]==='Lab'?(it[3]==='low'||it[3]==='high'?'warn':'good'):'acc'}">${it[0]}</span><span>${esc(it[1])}</span><span class="conf">${it[2]}%</span></div>`).join('')}
+ <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+  <button class="btn primary" data-act="intake-history">Add to ${esc(p?p.name:'patient')}'s history</button>
+  ${S.doc==='rx'?'<button class="btn" data-act="intake-rx">Continue these medicines today</button>':'<button class="btn" data-act="intake-rx">Add abnormal values to today\'s notes</button>'}
+ </div>
+ <p style="font-size:12px;color:var(--muted);margin-top:8px">Confidence below 90% is highlighted for the doctor to check. Nothing is added without a tap.</p>`;}
+function intakeTo(kind){const p=cur();if(!p){toast('Open a patient first');return;}const s=SAMPLE[S.doc];
+ if(kind==='history'){p.visits.unshift([S.doc==='rx'?'3 Mar 2026':'22 Oct 2026',S.doc==='rx'?'Old prescription (scanned)':'Lab report (scanned)',s.items.map(i=>i[1].split(' · ')[0]).join(', ')]);toast('Added to '+p.name+"'s history");}
+ else{if(S.doc==='rx'){s.items.filter(i=>i[3]&&DRUG[i[3]]).forEach(i=>p.rx.meds.push(mkMed([i[3],i[3]==='pcm650'?'SOS':i[3]==='coughls'?'1-1-1':'1-0-0',i[3]==='rabdsr'?'before':'after',5])));toast('Medicines added to today\'s parchi');}
+  else{const ab=s.items.filter(i=>i[3]==='low'||i[3]==='high').map(i=>i[1].split(' · ')[0]);p.rx.co=(p.rx.co?p.rx.co+' ':'')+'Reports: '+ab.join(', ')+'.';toast('Abnormal values added to complaints');}
+  renderConsult();renderQueue();document.getElementById('demo').scrollIntoView({behavior:reduce?'auto':'smooth'});}}
+function sampleShot(){S.userShot=false;showShot(sampleCanvas(S.doc));}
+
+/* ---------- studio ---------- */
+function renderStudio(){document.querySelectorAll('[data-lh]').forEach(i=>{i.value=S.lh[i.dataset.lh];});
+ $('#swatches').innerHTML=INKS.map(k=>`<button type="button" class="sw" style="background:${k[0]}" data-ink="${k[0]}" aria-label="${k[1]}" aria-pressed="${S.lh.ink===k[0]}"></button>`).join('');
+ document.querySelectorAll('#layoutSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.layout===S.lh.layout?'true':'false'));
+ $('#whoName').textContent=S.lh.doctor;}
+
+/* ---------- toast & copy ---------- */
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,3200);}
+function copyText(txt,btn){const done=()=>{const o=btn.textContent;btn.textContent='Copied';setTimeout(()=>btn.textContent=o,1600);};
+ try{navigator.clipboard.writeText(txt).then(done,()=>sel(btn));}catch(e){sel(btn);}
+ function sel(b){const el=b.parentElement.querySelector('b');const r=document.createRange();r.selectNodeContents(el);const s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected, press Ctrl+C';}}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{const t=e.target.closest('button,[data-open]');if(!t)return;
+ if(t.dataset.view){setView(t.dataset.view);return;}
+ if(t.dataset.open){if(t.dataset.goto)setView('opd');openPatient(t.dataset.open);return;}
+ if(t.dataset.psel){pSel=t.dataset.psel;renderPatients();return;}
+ if(t.dataset.tpl){applyTpl(t.dataset.tpl,true);return;}
+ if(t.dataset.pick){addDrug(t.dataset.pick);$('#medSearch').value='';$('#drop').hidden=true;$('#medSearch').focus();return;}
+ if(t.dataset.rm){const p=cur();p.rx.meds=p.rx.meds.filter(m=>m.uid!=+t.dataset.rm);renderMeds();renderSide();return;}
+ if(t.dataset.inv){const rx=cur().rx;const i=t.dataset.inv;rx.inv=rx.inv.includes(i)?rx.inv.filter(x=>x!==i):rx.inv.concat(i);t.classList.toggle('on');renderSide();return;}
+ if(t.dataset.adv){const rx=cur().rx;const i=+t.dataset.adv;rx.adv=rx.adv.includes(i)?rx.adv.filter(x=>x!==i):rx.adv.concat(i);t.classList.toggle('on');renderSide();return;}
+ if(t.dataset.fu!==undefined){const rx=cur().rx;rx.fu=+t.dataset.fu;document.querySelectorAll('[data-fu]').forEach(b=>b.classList.toggle('on',+b.dataset.fu===rx.fu));$('#fuTxt').textContent=rx.fu?'Reminder goes on WhatsApp the day before':'No follow-up set';renderSide();return;}
+ if(t.dataset.addco){const rx=cur().rx;rx.co=rx.co?rx.co.replace(/\.?\s*$/,', ')+t.dataset.addco.toLowerCase():t.dataset.addco;$('#in-co').value=rx.co;renderSide();return;}
+ if(t.dataset.ink){S.lh.ink=t.dataset.ink;renderStudio();renderSide();return;}
+ if(t.dataset.layout){S.lh.layout=t.dataset.layout;renderStudio();renderSide();return;}
+ if(t.dataset.doc){S.doc=t.dataset.doc;document.querySelectorAll('[data-doc]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.doc===S.doc?'true':'false'));sampleShot();return;}
+ if(t.dataset.copy){copyText(t.dataset.copy,t);return;}
+ const a=t.dataset.act;if(!a)return;
+ if(a==='voice')runVoice();
+ else if(a==='next')saveNext();
+ else if(a==='print')printView();
+ else if(a==='wa')waView();
+ else if(a==='close')closeModal();
+ else if(a==='goto-intake')document.getElementById('intake-sec').scrollIntoView({behavior:reduce?'auto':'smooth'});
+ else if(a==='sample-shot')sampleShot();
+ else if(a==='intake-history')intakeTo('history');
+ else if(a==='intake-rx')intakeTo('rx');
+ else if(a==='reset'){const lh=S.lh;S=seed();S.lh=lh;pSel='p3';setView('opd');renderQueue();renderConsult();sampleShot();toast('Demo reset');}
+});
+document.addEventListener('input',e=>{const t=e.target;
+ if(t.dataset.bind){const p=cur();if(!p)return;const k=t.dataset.bind;if(k.startsWith('v.')){const f=k.slice(2);p.rx.v[f]=t.value;t.className=vflag(f,t.value);}else p.rx[k]=t.value;renderSide();return;}
+ if(t.dataset.mf){const p=cur();const u=+t.closest('tr').dataset.uid;const m=p.rx.meds.find(x=>x.uid===u);if(!m)return;
+  m[t.dataset.mf]=t.dataset.mf==='days'?Math.max(1,parseInt(t.value)||1):t.value;
+  const q=t.closest('tr').querySelector('td.mono');if(q)q.textContent=qty(m);renderAlerts();renderSide();return;}
+ if(t.dataset.lh){S.lh[t.dataset.lh]=t.value;$('#whoName').textContent=S.lh.doctor;renderSide();return;}
+ if(t.id==='medSearch'){doSearch(t.value);return;}
+ if(t.id==='pSearch'){pq=t.value.toLowerCase();const pos=t.selectionStart;renderPatients();const n=$('#pSearch');n.focus();n.setSelectionRange(pos,pos);return;}
+});
+document.addEventListener('change',e=>{if(e.target.id==='hindiTgl'){cur().rx.hindi=e.target.checked;renderSide();}
+ if(e.target.id==='fileIn'&&e.target.files[0])readFile(e.target.files[0]);});
+document.addEventListener('keydown',e=>{
+ if(e.key==='Escape'){if(!$('#modal').hidden)closeModal();$('#drop').hidden=true;$('#creditPop').hidden=true;}
+ if(e.target.id==='medSearch'){const items=[...document.querySelectorAll('#drop [data-pick]')];if(!items.length)return;
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();hl=(hl+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;items.forEach((b,i)=>b.classList.toggle('hl',i===hl));}
+  if(e.key==='Enter'){e.preventDefault();items[hl].click();}}});
+document.addEventListener('focusout',e=>{if(e.target.id==='medSearch')setTimeout(()=>{if(!document.activeElement||!document.activeElement.closest('#drop'))$('#drop')&&($('#drop').hidden=true);},150);});
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+$('#creditBtn').addEventListener('click',()=>{const p=$('#creditPop');p.hidden=!p.hidden;$('#creditBtn').setAttribute('aria-expanded',String(!p.hidden));});
+$('#qAdd').addEventListener('submit',e=>{e.preventDefault();const n=$('#qa-name').value.trim();if(!n)return;
+ const tok=Math.max.apply(null,S.patients.map(p=>p.tok))+1;
+ const p={tok,id:'p'+tok+'x'+Date.now(),name:n,age:+$('#qa-age').value||0,sex:$('#qa-sex').value,phone:$('#qa-phone').value||'—',uhid:'SC-0'+(600+tok),status:'waiting',co:$('#qa-co').value||'General check-up',cond:[],all:[],visits:[],rx:newRx()};
+ p.rx.co=p.co;p.voice={text:'Teen din se bukhar aur body ache. BP 120 by 80, temp 100.6. Viral fever. Paracetamol 650 teen baar, cetirizine raat ko. CBC. Teen din baad.',tpl:'fever',co:p.co,v:{bp:'120/80',temp:'100.6'},dx:'Acute febrile illness (viral)'};
+ S.patients.push(p);e.target.reset();renderQueue();toast('Token '+tok+' created for '+n+'. Patient is in the queue.');});
+$("#studio").addEventListener('submit',e=>e.preventDefault());
+const dz=$('#dropZone');
+['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('over');}));
+['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('over');}));
+dz.addEventListener('drop',e=>{const f=e.dataTransfer&&e.dataTransfer.files[0];if(f)readFile(f);});
+function readFile(f){if(!/^image\//.test(f.type)){toast('Please choose a photo (JPG or PNG)');return;}
+ const r=new FileReader();r.onload=()=>{S.userShot=true;showShot(r.result);};r.readAsDataURL(f);}
+
+/* ---------- boot ---------- */
+function boot(){renderStudio();renderQueue();renderConsult();sampleShot();
+ const c=$('#clock');if(c)c.textContent=new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});}
+if(document.fonts&&document.fonts.ready){document.fonts.ready.then(()=>{if(!S.userShot)sampleShot();});}
+boot();
+})();
+</script>
+
+</body></html>

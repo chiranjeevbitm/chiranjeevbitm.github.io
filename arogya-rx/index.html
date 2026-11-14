@@ -1,0 +1,219 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Arogya Rx Website</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Arogya Rx: 30-second prescriptions on your own letterhead, Hindi dose instructions on WhatsApp, voice and photo intake for busy OPDs. Demo website.">
+<meta property="og:title" content="Arogya Rx">
+<meta property="og:description" content="Prescription ready before the patient stands up. AI-assisted clinic software for Bharat.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#2340A6">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel:wght@400;700;800;900&family=Hind:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" href="css/styles.css">
+<script>
+  // apply saved theme and language before paint
+  (function(){try{var t=localStorage.getItem('arx-theme');if(!t)t=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.setAttribute('data-theme',t);var l=localStorage.getItem('arx-lang');if(l)document.documentElement.lang=l;}catch(e){}})();
+</script>
+
+<div id="top"></div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Arogya Rx home"><span class="brand-mark">℞</span><span><b>Arogya Rx</b><small>आरोग्य Rx</small></span></a>
+    <nav class="nav" id="nav" aria-label="Sections">
+      <a href="#features" data-i18n="nav.features">Features</a>
+      <a href="#how" data-i18n="nav.how">How it works</a>
+      <a href="#roadmap" data-i18n="nav.roadmap">Roadmap</a>
+      <a href="#pricing" data-i18n="nav.pricing">Pricing</a>
+      <a href="#team" data-i18n="nav.team">Team</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <div class="ctrls">
+      <div class="seg" role="group" aria-label="Language"><button data-lang="en" aria-pressed="true">EN</button><button data-lang="hi" aria-pressed="false">हिं</button></div>
+      <button class="icon-btn" id="themeBtn" aria-label="Switch light or dark theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+      <a class="btn primary sm" href="#login" id="loginBtn" data-i18n="nav.login">Login</a>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<!-- ============ LANDING ============ -->
+<main id="page-landing">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="badge"><i></i><span data-i18n="hero.badge">AI-assisted prescriptions for Bharat's clinics</span></span>
+        <h1><span style="color:inherit;display:block" data-i18n="hero.h1a">Prescription ready</span><span data-i18n="hero.h1b">before the patient stands up.</span></h1>
+        <p class="hero-sub" data-i18n="hero.sub"></p>
+        <div class="hero-cta">
+          <a class="btn primary lg" href="#login" data-i18n="hero.cta1">Try the live demo</a>
+          <a class="btn lg" href="#features" data-i18n="hero.cta2">See all features</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><b>1</b><span data-i18n="stat.clinic"></span></div>
+          <div class="stat"><b class="mono">205,507</b><span data-i18n="stat.meds"></span></div>
+          <div class="stat"><b class="mono">&lt;30</b><span data-i18n="stat.secs"></span></div>
+          <div class="stat"><b>2</b><span data-i18n="stat.lang"></span></div>
+        </div>
+      </div>
+      <div class="hero-art">
+        <div id="heroPaper"></div>
+        <div class="stamp">Parchi ready<span class="mono">0:24</span></div>
+        <div class="float-card"><span class="tag good">WhatsApp</span><b style="margin-top:4px">सुबह और रात · खाने के बाद · 5 दिन</b><small style="color:var(--muted)">Dose timings reach the patient in Hindi</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="dashboard">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="shot.eyebrow">The dashboard</div><h2 data-i18n="shot.h2"></h2><p data-i18n="shot.p"></p></div><a class="btn primary" href="#login" data-i18n="shot.open">Open the live dashboard</a></div>
+      <a class="shot" href="#login" style="display:block;text-decoration:none;color:inherit" aria-label="Open the live dashboard">
+        <div class="shot-bar"><i></i><i></i><i></i><span>arogya-rx · OPD · Dr. Rakesh Sinha</span></div>
+        <div class="shot-body">
+          <div class="shot-side"><div class="on">Home</div><div>Schedule</div><div>Intake</div><div>OPD &amp; Rx</div><div>Patients</div><div>Settings</div></div>
+          <div class="shot-main">
+            <h4>Hi Dr. Sinha, how can I help today?</h4>
+            <div class="ask">✦ Show diabetic patients with HbA1c above 7</div>
+            <div style="font-weight:600;font-size:14px;margin-top:4px">Today's appointments</div>
+            <div class="appt"><span class="av">RP</span><span><b>Ramesh Prasad</b><br><small style="color:var(--muted)">Sugar follow-up · token 3</small></span><span class="tag acc">With doctor</span></div>
+            <div class="appt"><span class="av">SD</span><span><b>Sita Devi</b><br><small style="color:var(--muted)">Burning urination · allergic to sulfa</small></span><span class="tag crit">Allergy</span></div>
+            <div class="appt"><span class="av">MA</span><span><b>Mohd. Arif</b><br><small style="color:var(--muted)">Fever 3 days · booked on WhatsApp</small></span><span class="tag">10:40</span></div>
+          </div>
+          <div class="shot-right" id="shotPaper"></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="block alt" id="features">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="feat.eyebrow">Features</div><h2 data-i18n="feat.h2"></h2><p data-i18n="feat.p"></p></div>
+        <div class="ffilter" role="group" aria-label="Filter features">
+          <button class="chip on" data-ff="all"><span data-i18n="feat.all">All</span> <span class="n" id="fc-all"></span></button>
+          <button class="chip" data-ff="live"><span data-i18n="feat.live">Live</span> <span class="n" id="fc-live"></span></button>
+          <button class="chip" data-ff="pilot"><span data-i18n="feat.pilot">In pilot</span> <span class="n" id="fc-pilot"></span></button>
+          <button class="chip" data-ff="road"><span data-i18n="feat.road">Roadmap</span> <span class="n" id="fc-road"></span></button>
+        </div>
+      </div>
+      <div class="fgrid" id="fgrid"></div>
+    </div>
+  </section>
+
+  <section class="block" id="how">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="how.eyebrow">How it works</div><h2 data-i18n="how.h2"></h2></div></div>
+      <div class="steps">
+        <div class="step"><div class="n">Step 01</div><h3 data-i18n="how.s1t"></h3><p data-i18n="how.s1p"></p></div>
+        <div class="step"><div class="n">Step 02</div><h3 data-i18n="how.s2t"></h3><p data-i18n="how.s2p"></p></div>
+        <div class="step"><div class="n">Step 03</div><h3 data-i18n="how.s3t"></h3><p data-i18n="how.s3p"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block alt" id="roadmap">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="road.eyebrow">Roadmap</div><h2 data-i18n="road.h2"></h2></div></div>
+      <div class="road" id="road"></div>
+    </div>
+  </section>
+
+  <section class="block" id="pricing">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="price.eyebrow">Pricing</div><h2 data-i18n="price.h2"></h2><p data-i18n="price.note"></p></div>
+        <div class="seg" role="group" aria-label="Billing period"><button data-bill="m" aria-pressed="true" data-i18n="price.monthly">Monthly</button><button data-bill="y" aria-pressed="false" data-i18n="price.yearly">Yearly</button></div></div>
+      <div class="plans" id="plans"></div>
+    </div>
+  </section>
+
+  <section class="block alt" id="team">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="team.eyebrow">The team</div><h2 data-i18n="team.h2"></h2></div></div>
+      <div class="team" id="teamGrid"></div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="sec-head"><div><div class="eyebrow" data-i18n="faq.eyebrow">Questions</div><h2 data-i18n="faq.h2"></h2></div></div>
+      <div class="faq" id="faqGrid"></div>
+    </div>
+  </section>
+
+  <section class="block" id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="cta">
+        <div><h2 data-i18n="cta.h2"></h2><p data-i18n="cta.p"></p></div>
+        <form id="leadForm" autocomplete="on">
+          <div class="field"><label for="lf-name" data-i18n="form.name"></label><input class="inp" id="lf-name" required></div>
+          <div class="field"><label for="lf-phone" data-i18n="form.phone"></label><input class="inp" id="lf-phone" inputmode="tel" required></div>
+          <div class="field"><label for="lf-clinic" data-i18n="form.clinic"></label><input class="inp" id="lf-clinic" required></div>
+          <div class="field"><label for="lf-pts" data-i18n="form.patients"></label><select class="inp" id="lf-pts"><option>&lt; 30</option><option selected>30–60</option><option>60–100</option><option>100+</option></select></div>
+          <button class="btn primary full" type="submit" data-i18n="form.send">Request a demo visit</button>
+          <div class="done" id="leadDone" hidden></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ============ LOGIN ============ -->
+<main id="page-login" class="login" hidden>
+  <form class="login-card" id="loginForm">
+    <span class="brand-mark" style="width:44px;height:44px;font-size:24px">℞</span>
+    <h2 data-i18n="login.h">Log in to your clinic</h2>
+    <p data-i18n="login.p"></p>
+    <div class="field"><label for="lg-user" data-i18n="login.user"></label><input class="inp" id="lg-user" value="demo@arogyarx.in" autocomplete="username"></div>
+    <div class="field"><label for="lg-pass" data-i18n="login.pass"></label><input class="inp" id="lg-pass" type="password" value="demo1234" autocomplete="current-password"></div>
+    <button class="btn primary lg" type="submit" data-i18n="login.btn">Log in</button>
+    <p style="font-size:13px" data-i18n="login.otp"></p>
+    <a href="#top" style="font-size:14px" data-i18n="login.back">Back to website</a>
+  </form>
+</main>
+
+<!-- ============ APP ============ -->
+<main id="page-app" class="app" hidden>
+  <aside class="sidebar" id="sidebar"></aside>
+  <div class="view" id="view"></div>
+</main>
+
+<footer class="foot" id="footer">
+  <div class="wrap">
+    <div>
+      <a class="brand" href="#top"><span class="brand-mark">℞</span><span><b>Arogya Rx</b><small>आरोग्य Rx</small></span></a>
+      <p><span data-i18n="foot.built">Built by</span> <b>Chiranjeev Kumar</b> · GenAI engineer, Bengaluru · with Arogya Clinic, Muzaffarpur.</p>
+      <p data-i18n="foot.rights"></p>
+      <p>© 2026 Arogya Rx</p>
+    </div>
+    <div class="links-grid">
+      <a class="lnk" href="assets/resume.pdf" target="_blank" rel="noopener"><span>Resume</span><b>Chiranjeev Kumar (PDF)</b></a>
+      <a class="lnk" href="https://chiranjeev-ai-engineer.vercel.app" target="_blank" rel="noopener"><span>Portfolio</span><b>chiranjeev-ai-engineer.vercel.app</b></a>
+      <a class="lnk" href="https://linkedin.com/in/chiranjeev-kumar-07071997" target="_blank" rel="noopener"><span>LinkedIn</span><b>linkedin.com/in/chiranjeev-kumar-07071997</b></a>
+      <a class="lnk" href="mailto:chiranjeevkumar47@gmail.com"><span>Gmail</span><b>chiranjeevkumar47@gmail.com</b></a>
+      <a class="lnk" href="https://wa.me/919546519953" target="_blank" rel="noopener"><span>Phone / WhatsApp</span><b>+91 95465 19953</b></a>
+      <a class="lnk" href="https://github.com/chiranjeevbitm" target="_blank" rel="noopener"><span>GitHub</span><b>github.com/chiranjeevbitm</b></a>
+    </div>
+  </div>
+</footer>
+
+<div class="credit">
+  <div class="pop" id="creditPop" hidden>
+    <b>Demo by Chiranjeev Kumar</b><small>GenAI engineer · Arogya Rx</small>
+    <a href="assets/resume.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+    <a href="https://chiranjeev-ai-engineer.vercel.app" target="_blank" rel="noopener">Portfolio</a>
+    <a href="https://linkedin.com/in/chiranjeev-kumar-07071997" target="_blank" rel="noopener">LinkedIn</a>
+    <a href="mailto:chiranjeevkumar47@gmail.com">chiranjeevkumar47@gmail.com</a>
+    <a href="https://wa.me/919546519953" target="_blank" rel="noopener">+91 95465 19953</a>
+  </div>
+  <button type="button" id="creditBtn" aria-expanded="false" aria-controls="creditPop"><span class="avc">CK</span>Demo by Chiranjeev Kumar</button>
+</div>
+
+<div class="modal" id="modal" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="sheet-h"><h3 id="modalTitle"></h3><button class="btn sm" data-act="close">Close</button></div><div class="sheet-b" id="modalBody"></div></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="js/i18n.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+
+
+
+</body></html>
