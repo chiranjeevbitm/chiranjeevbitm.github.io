@@ -1166,7 +1166,7 @@ async function startStage(){
   document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) { last = performance.now(); requestAnimationFrame(loop); } });
   function loop(now){
     if (!visible) return;
-    const dt = Math.min(.05, (now - last) / 1000); last = now; t += dt;
+    const dt = Math.min(.25, (now - last) / 1000); last = now; t += dt;
     const k = reduce ? 1 : 1 - Math.pow(.02, dt);
     const a = geo.attributes.position.array;
     for (let i = 0; i < a.length; i++) a[i] += (target[i] - a[i]) * k * (0.6 + (i % 7) * .06);
