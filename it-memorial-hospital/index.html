@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Digital Hospital Blueprint · I.T. Memorial Hospital, Muzaffarpur</title>
+<meta name="description" content="A 90-day proposal for I.T. Memorial Hospital, Muzaffarpur: ABDM-compliant hospital software, WhatsApp and Google growth, and an AI co-pilot that speaks Hindi.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#07130f">
+<style>
+@font-face{font-family:"Fraunces";src:url("../assets/fonts/fraunces-latin-full-normal.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"Hanken Grotesk";src:url("../assets/fonts/hanken-grotesk-latin-wght-normal.woff2") format("woff2");font-weight:100 900;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("../assets/fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2");font-weight:100 800;font-display:swap}
+:root{
+  --bg:#07130f;--bg2:#0b1d17;--bg3:#10271f;
+  --ink:#eef3ea;--ink2:#c9d6cd;--muted:#8fa69a;--line:rgba(238,243,234,.11);--line2:rgba(238,243,234,.2);
+  --lime:#d4f27a;--mint:#6fe3c1;--coral:#ff8a6b;--amber:#ffc861;
+  --card:rgba(255,255,255,.035);--card2:rgba(255,255,255,.06);
+  --serif:"Fraunces",Georgia,serif;--sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace;
+  --hi:"Noto Sans Devanagari","Mangal","Kohinoor Devanagari",var(--sans);
+  --r:18px;--max:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+::selection{background:var(--lime);color:#0b1d17}
+.hi{font-family:var(--hi)}
+.mono{font-family:var(--mono)}
+
+/* ---------- 3D stage ---------- */
+#stage{position:fixed;inset:0;z-index:0;pointer-events:none;transition:opacity 1.2s ease}
+#stage canvas{width:100%;height:100%;display:block}
+#stage.flat{background:radial-gradient(60% 50% at 75% 40%,rgba(111,227,193,.18),transparent 70%),radial-gradient(40% 40% at 20% 80%,rgba(212,242,122,.10),transparent 70%)}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.06;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+main,header,footer{position:relative;z-index:2}
+
+/* ---------- nav ---------- */
+.nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:18px clamp(18px,4vw,44px);transition:background .4s,border-color .4s;border-bottom:1px solid transparent}
+.nav.solid{background:rgba(7,19,15,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-color:var(--line)}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand-mark{width:34px;height:34px;border-radius:10px;background:var(--lime);display:grid;place-items:center}
+.brand-mark svg{width:18px;height:18px}
+.brand b{font-weight:700;font-size:15px;letter-spacing:.01em;display:block;line-height:1.1}
+.brand small{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+.nav-links{display:flex;gap:4px}
+.nav-links a{font-size:13.5px;color:var(--ink2);text-decoration:none;padding:8px 12px;border-radius:999px;transition:background .25s,color .25s}
+.nav-links a:hover,.nav-links a.on{background:var(--card2);color:var(--ink)}
+.nav-cta{font-size:13.5px;font-weight:700;text-decoration:none;background:var(--lime);color:#0b1d17;padding:10px 16px;border-radius:999px}
+@media(max-width:1020px){.nav-links{display:none}}
+@media(max-width:560px){.brand small{display:none}.nav-cta{padding:9px 13px;font-size:12.5px}.brand b{font-size:14px}}
+
+/* ---------- progress ---------- */
+.progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--mint),var(--lime));z-index:30;width:0}
+
+/* ---------- layout ---------- */
+section{position:relative;padding:clamp(90px,12vw,150px) clamp(18px,4vw,44px)}
+.wrap{max-width:var(--max);margin:0 auto}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--lime);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1px;background:currentColor}
+h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:-.02em;line-height:1.04}
+h2{font-size:clamp(38px,5.2vw,68px);margin:18px 0 18px;max-width:16ch}
+h2 em,h1 em{font-style:italic;color:var(--lime)}
+h3{font-size:clamp(22px,2.2vw,28px);line-height:1.15}
+.lead{font-size:clamp(17px,1.6vw,20px);color:var(--ink2);max-width:62ch}
+.sec-head{margin-bottom:clamp(40px,6vw,70px)}
+.muted{color:var(--muted)}
+.chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-family:var(--mono);padding:5px 10px;border-radius:999px;border:1px solid var(--line2);color:var(--ink2)}
+.src{font-size:12px;color:var(--muted);font-family:var(--mono);margin-top:10px}
+.src a{color:var(--muted)}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}.rv.d4{transition-delay:.32s}.rv.d5{transition-delay:.4s}
+
+/* ---------- hero ---------- */
+.hero{min-height:100vh;display:flex;align-items:center;padding-top:120px}
+.hero .wrap{width:100%}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px}
+.hero h1{font-size:clamp(48px,7.2vw,106px);max-width:13ch}
+.hero h1 .line{display:block;overflow:hidden}
+.hero h1 .line span{display:inline-block;transform:translateY(105%);transition:transform 1.2s cubic-bezier(.2,.8,.15,1)}
+.hero.go h1 .line span{transform:none}
+.hero h1 .line:nth-child(2) span{transition-delay:.12s}
+.hero h1 .line:nth-child(3) span{transition-delay:.24s}
+.hindi-tag{font-family:var(--hi);font-size:clamp(20px,2.2vw,28px);color:var(--mint);margin:26px 0 18px;opacity:0;transition:opacity 1.2s .7s}
+.hero.go .hindi-tag{opacity:1}
+.hero .lead{opacity:0;transform:translateY(16px);transition:all 1s .9s}
+.hero.go .lead{opacity:1;transform:none}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px;opacity:0;transition:opacity 1s 1.15s}
+.hero.go .hero-cta{opacity:1}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 22px;border-radius:999px;font-weight:700;font-size:15px;text-decoration:none;border:1px solid var(--line2);transition:transform .25s,background .25s,border-color .25s;cursor:pointer;background:transparent;color:var(--ink);font-family:var(--sans)}
+.btn:hover{transform:translateY(-2px);border-color:var(--ink2)}
+.btn.primary{background:var(--lime);color:#0b1d17;border-color:var(--lime)}
+.btn .arr{display:inline-block;transition:transform .25s}
+.btn:hover .arr{transform:translateX(4px)}
+.hero-foot{position:absolute;left:clamp(18px,4vw,44px);right:clamp(18px,4vw,44px);bottom:28px;display:flex;justify-content:space-between;align-items:end;font-size:12px;color:var(--muted);font-family:var(--mono);letter-spacing:.08em}
+.scrollcue{display:flex;align-items:center;gap:10px}
+@media(max-width:700px){.hero-foot{display:none}}
+.scrollcue i{width:1px;height:42px;background:linear-gradient(var(--lime),transparent);animation:cue 2.2s infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stat{background:rgba(9,24,19,.86);padding:30px 24px 26px;backdrop-filter:blur(6px)}
+.stat .n{font-family:var(--serif);font-size:clamp(42px,4.4vw,60px);line-height:1;letter-spacing:-.03em}
+.stat .n small{font-size:.45em;color:var(--lime);margin-left:2px}
+.stat p{color:var(--ink2);font-size:14.5px;margin-top:12px}
+.stat .src{margin-top:8px}
+@media(max-width:980px){.stats{grid-template-columns:repeat(2,1fr)}.stat:last-child{grid-column:span 2}}
+.quote-band{margin-top:56px;display:grid;grid-template-columns:1.2fr 1fr;gap:40px;align-items:center}
+.quote-band blockquote{font-family:var(--serif);font-size:clamp(24px,2.6vw,34px);line-height:1.25;letter-spacing:-.01em}
+.quote-band blockquote em{color:var(--lime)}
+.review-stack{display:grid;gap:10px}
+.review{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;font-size:14.5px;color:var(--ink2)}
+.review .stars{color:var(--amber);letter-spacing:2px;font-size:12px;margin-bottom:4px}
+@media(max-width:860px){.quote-band{grid-template-columns:1fr}}
+
+/* ---------- mandate ---------- */
+.mandate{display:grid;grid-template-columns:1.25fr 1fr;gap:22px}
+.m-main{background:linear-gradient(150deg,rgba(212,242,122,.13),rgba(111,227,193,.04) 60%);border:1px solid rgba(212,242,122,.35);border-radius:24px;padding:clamp(28px,4vw,46px);position:relative;overflow:hidden}
+.m-main .tag{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.12em;text-transform:uppercase}
+.m-main h3{font-size:clamp(28px,3.2vw,42px);margin:16px 0 18px}
+.m-main p{color:var(--ink2)}
+.m-main .pulse{position:absolute;right:28px;top:28px;width:12px;height:12px;border-radius:50%;background:var(--coral);box-shadow:0 0 0 0 rgba(255,138,107,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 16px rgba(255,138,107,0)}100%{box-shadow:0 0 0 0 rgba(255,138,107,0)}}
+.m-side{display:grid;gap:14px}
+.m-item{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px}
+.m-item b{display:block;font-size:15px;margin-bottom:4px}
+.m-item span{font-size:14.5px;color:var(--ink2)}
+@media(max-width:900px){.mandate{grid-template-columns:1fr}}
+.milestones{margin-top:46px;display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
+.milestones::before{content:"";position:absolute;left:0;right:0;top:27px;height:1px;background:var(--line2)}
+.milestones .fill{position:absolute;left:0;top:27px;height:1px;width:0;background:linear-gradient(90deg,var(--mint),var(--lime));transition:width 2.2s cubic-bezier(.3,.7,.2,1)}
+.milestones.in .fill{width:100%}
+.ms{padding-right:26px;position:relative}
+.ms .dot{width:54px;height:54px;border-radius:50%;border:1px solid var(--line2);background:var(--bg2);display:grid;place-items:center;font-family:var(--mono);font-size:14px;color:var(--lime);position:relative;z-index:1}
+.ms h4{font-size:17px;margin:18px 0 6px}
+.ms p{font-size:14.5px;color:var(--ink2)}
+@media(max-width:760px){.milestones{grid-template-columns:1fr;gap:26px}.milestones::before,.milestones .fill{display:none}}
+
+/* ---------- ecosystem ---------- */
+.eco{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.eco-svg{width:100%;max-width:700px;aspect-ratio:860/640;margin:0 auto;display:block}
+.eco-svg .spoke{stroke:rgba(212,242,122,.35);stroke-width:1;stroke-dasharray:3 7;animation:flow 1.6s linear infinite}
+.eco-svg .spoke.on{stroke:var(--lime);stroke-width:1.6}
+@keyframes flow{to{stroke-dashoffset:-20}}
+.eco-svg .ring{fill:none;stroke:var(--line2)}
+.eco-svg .node{cursor:pointer}
+.eco-svg .node circle{fill:#0e231c;stroke:var(--line2);stroke-width:1;transition:all .3s}
+.eco-svg .node:hover circle,.eco-svg .node.on circle{fill:var(--lime);stroke:var(--lime)}
+.eco-svg .node text{fill:var(--ink2);font-family:var(--sans);font-size:16px;font-weight:600;pointer-events:none}
+.eco-svg .node .ico{fill:var(--lime);font-family:var(--mono);font-size:14px;font-weight:700}
+.eco-svg .node:hover .ico,.eco-svg .node.on .ico{fill:#0b1d17}
+.eco-svg .core circle{fill:rgba(212,242,122,.08);stroke:var(--lime)}
+.eco-svg .core text{fill:var(--ink);font-family:var(--serif);font-size:21px}
+.eco-svg .core .sub{fill:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.1em}
+.eco-svg .orbit{fill:var(--lime)}
+.eco-panel{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:30px;min-height:330px}
+.eco-panel .k{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.12em;text-transform:uppercase}
+.eco-panel h3{margin:10px 0 12px}
+.eco-panel p{color:var(--ink2);font-size:15.5px}
+.eco-panel ul{list-style:none;margin-top:16px;display:grid;gap:8px}
+.eco-panel li{font-size:14.5px;color:var(--ink2);padding-left:20px;position:relative}
+.eco-panel li::before{content:"";position:absolute;left:0;top:10px;width:8px;height:1px;background:var(--lime)}
+.eco-panel .hint{margin-top:18px;font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.eco-chips{display:none}
+@media(max-width:900px){.eco{grid-template-columns:1fr}}
+@media(max-width:700px){.eco-svg{display:none}.eco-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}.eco-chips button{font:600 13px var(--sans);color:var(--ink2);background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:8px 12px}.eco-chips button.on{background:var(--lime);color:#0b1d17;border-color:var(--lime)}}
+.deploy{margin-top:56px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.dp{border:1px solid var(--line);border-radius:18px;padding:24px;background:rgba(9,24,19,.7)}
+.dp.rec{border-color:rgba(212,242,122,.45);background:linear-gradient(160deg,rgba(212,242,122,.08),rgba(9,24,19,.7))}
+.dp .badge{font-family:var(--mono);font-size:11px;color:#0b1d17;background:var(--lime);padding:3px 8px;border-radius:999px;margin-left:8px;vertical-align:middle}
+.dp h4{font-size:18px;margin-bottom:8px}
+.dp p{font-size:14.5px;color:var(--ink2)}
+@media(max-width:860px){.deploy{grid-template-columns:1fr}}
+
+/* ---------- market ---------- */
+.range{display:grid;gap:14px}
+.rrow{display:grid;grid-template-columns:240px 1fr;gap:20px;align-items:center}
+.rrow .lbl b{display:block;font-size:15px}
+.rrow .lbl span{font-size:12.5px;color:var(--muted);font-family:var(--mono)}
+.track{position:relative;height:38px;border-radius:10px;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+.bar{position:absolute;top:6px;bottom:6px;border-radius:7px;background:linear-gradient(90deg,var(--mint),var(--lime));transform-origin:left;transform:scaleX(0);transition:transform 1.4s cubic-bezier(.2,.7,.2,1)}
+.range.in .bar{transform:scaleX(1)}
+.bar.alt{background:linear-gradient(90deg,#4f7d6c,#8fb3a2)}
+.bar.hot{background:linear-gradient(90deg,var(--amber),var(--coral))}
+.bar em{position:absolute;right:-6px;top:50%;transform:translate(100%,-50%);font-style:normal;font-family:var(--mono);font-size:12.5px;color:var(--ink);white-space:nowrap;padding-left:10px}
+.bar.lft em{right:auto;left:-6px;transform:translate(-100%,-50%);padding:0 10px 0 0}
+.bar.flip em{right:auto;left:8px;transform:translateY(-50%);color:#0b1d17;font-weight:700}
+.axis{display:grid;grid-template-columns:240px 1fr;gap:20px;margin-top:6px}
+.axis .ticks{position:relative;height:18px;font-family:var(--mono);font-size:11px;color:var(--muted)}
+.axis .ticks span{position:absolute;transform:translateX(-50%)}
+.lbl .mr{display:none}
+@media(max-width:760px){.rrow,.axis{grid-template-columns:1fr;gap:6px}.bar em{display:none}.lbl .mr{display:inline;color:var(--lime)}}
+.vendors{margin-top:50px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.vd{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;transition:border-color .3s,transform .3s}
+.vd:hover{border-color:var(--line2);transform:translateY(-3px)}
+.vd b{font-size:16px}
+.vd .pr{font-family:var(--mono);font-size:13px;color:var(--lime);margin:6px 0 8px}
+.vd p{font-size:14px;color:var(--ink2)}
+@media(max-width:900px){.vendors{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.vendors{grid-template-columns:1fr}}
+.insight{margin-top:40px;display:flex;gap:22px;align-items:flex-start;padding:26px 28px;border-radius:20px;border:1px dashed rgba(212,242,122,.45);background:rgba(212,242,122,.05)}
+.insight .ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--lime);color:#0b1d17;display:grid;place-items:center;font-weight:800;font-family:var(--mono)}
+.insight p{font-size:clamp(17px,1.7vw,20px);font-family:var(--serif);line-height:1.35}
+
+/* ---------- audit ---------- */
+.audit{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:start}
+.score{position:sticky;top:110px;text-align:center;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:34px 26px}
+.score svg{width:210px;height:210px;transform:rotate(-90deg)}
+.score .bg{fill:none;stroke:rgba(255,255,255,.07);stroke-width:12}
+.score .fg{fill:none;stroke:url(#sg);stroke-width:12;stroke-linecap:round;stroke-dasharray:597;stroke-dashoffset:597;transition:stroke-dashoffset 2s cubic-bezier(.2,.7,.2,1)}
+.score .val{margin-top:-140px;margin-bottom:80px;font-family:var(--serif);font-size:58px;line-height:1}
+.score .val small{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.1em;margin-top:6px}
+.score p{font-size:14.5px;color:var(--ink2)}
+.legend{display:flex;justify-content:center;gap:14px;margin-top:16px;font-size:12.5px;color:var(--muted)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ck{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;background:rgba(9,24,19,.75);border:1px solid var(--line)}
+.ck .s{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;margin-top:2px}
+.ck.y .s{background:var(--mint);color:#0b1d17}
+.ck.p .s{background:var(--amber);color:#0b1d17}
+.ck.n .s{background:transparent;border:1px solid var(--coral);color:var(--coral)}
+.ck b{font-size:14.5px;display:block}
+.ck span{font-size:13px;color:var(--muted)}
+@media(max-width:900px){.audit{grid-template-columns:1fr}.score{position:relative;top:0}}
+@media(max-width:600px){.checks{grid-template-columns:1fr}}
+.nap{margin-top:46px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px}
+.nap h4{font-size:18px;margin-bottom:6px}
+.nap .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.nap .ph{font-family:var(--mono);font-size:13px;padding:8px 12px;border-radius:10px;border:1px solid var(--line2);background:rgba(255,255,255,.02)}
+.nap .ph small{display:block;color:var(--muted);font-size:10.5px;letter-spacing:.06em;margin-top:2px}
+.nap .ph.ok{border-color:var(--lime);color:var(--lime)}
+
+/* ---------- layers ---------- */
+.layers{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}
+.stack{position:relative;height:440px;perspective:1400px}
+.plate{position:absolute;left:50%;top:50%;width:230px;height:230px;margin:-115px 0 0 -115px;border-radius:30px;transform-style:preserve-3d;transition:transform 1.2s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s;border:1px solid var(--line2);display:grid;place-items:center;cursor:pointer}
+.plate span{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;transform:rotate(45deg)}
+.plate.p1{background:linear-gradient(135deg,rgba(111,227,193,.30),rgba(111,227,193,.06));transform:rotateX(58deg) rotateZ(-45deg) translateZ(0)}
+.plate.p2{background:linear-gradient(135deg,rgba(212,242,122,.30),rgba(212,242,122,.06));transform:rotateX(58deg) rotateZ(-45deg) translateZ(0)}
+.plate.p3{background:linear-gradient(135deg,rgba(255,200,97,.34),rgba(255,138,107,.08));transform:rotateX(58deg) rotateZ(-45deg) translateZ(0)}
+.stack.in .p1{transform:rotateX(58deg) rotateZ(-45deg) translateZ(-105px)}
+.stack.in .p2{transform:rotateX(58deg) rotateZ(-45deg) translateZ(0)}
+.stack.in .p3{transform:rotateX(58deg) rotateZ(-45deg) translateZ(105px)}
+.plate.on{border-color:var(--ink);box-shadow:0 0 60px rgba(212,242,122,.25)}
+.lcards{display:grid;gap:14px}
+.lc{border:1px solid var(--line);border-radius:20px;padding:24px 26px;background:rgba(9,24,19,.78);transition:border-color .3s,background .3s;cursor:pointer}
+.lc.on{border-color:var(--lime);background:linear-gradient(150deg,rgba(212,242,122,.08),rgba(9,24,19,.8))}
+.lc .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.lc .k{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.12em}
+.lc h3{margin:6px 0 8px;font-size:24px}
+.lc p{font-size:14.5px;color:var(--ink2)}
+.lc ul{list-style:none;display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.lc li{font-size:12.5px;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.05);color:var(--ink2)}
+@media(max-width:900px){.layers{grid-template-columns:1fr}.stack{height:360px;transform:scale(.8)}}
+
+/* ---------- AI showcase ---------- */
+.ai{display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center}
+.phone{width:320px;border-radius:40px;background:#0e1512;border:1px solid var(--line2);padding:14px;box-shadow:0 40px 80px rgba(0,0,0,.45)}
+.phone .scr{border-radius:28px;overflow:hidden;background:#0b1410}
+.wa-top{background:#1f2c27;padding:14px 16px;display:flex;gap:10px;align-items:center}
+.wa-top .av{width:34px;height:34px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:#0b1d17;font-weight:800;font-size:12px}
+.wa-top b{font-size:14px;display:block}
+.wa-top small{font-size:11px;color:#9fb3a8}
+.wa-body{padding:14px 12px;min-height:420px;display:flex;flex-direction:column;gap:8px;background:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1px) 0 0/14px 14px}
+.msg{max-width:84%;padding:9px 12px;border-radius:12px;font-size:13.5px;line-height:1.45;opacity:0;transform:translateY(8px) scale(.98);transition:all .5s}
+.msg.show{opacity:1;transform:none}
+.msg.in{background:#1f2c27;align-self:flex-start;border-top-left-radius:4px}
+.msg.out{background:#1d5c47;align-self:flex-end;border-top-right-radius:4px}
+.msg .t{display:block;text-align:right;font-size:10px;color:#9fb3a8;margin-top:3px}
+.msg .btns{display:flex;gap:6px;margin-top:8px}
+.msg .btns span{flex:1;text-align:center;font-size:12px;padding:6px;border-radius:8px;background:rgba(255,255,255,.07);color:var(--mint)}
+.typing{align-self:flex-start;background:#1f2c27;border-radius:12px;padding:10px 14px;display:none;gap:4px}
+.typing.show{display:flex}
+.typing i{width:6px;height:6px;border-radius:50%;background:#9fb3a8;animation:bl 1.2s infinite}
+.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
+@keyframes bl{0%,80%,100%{opacity:.3}40%{opacity:1}}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:30px}
+.aic{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px}
+.aic .ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:rgba(212,242,122,.12);color:var(--lime);font-family:var(--mono);font-weight:700;margin-bottom:12px}
+.aic b{display:block;font-size:16px;margin-bottom:4px}
+.aic p{font-size:14px;color:var(--ink2)}
+.guard{margin-top:18px;font-size:13px;color:var(--muted);font-family:var(--mono)}
+@media(max-width:980px){.ai{grid-template-columns:1fr}.phone{margin:0 auto}}
+@media(max-width:600px){.ai-grid{grid-template-columns:1fr}.phone{width:100%;max-width:330px}}
+
+/* ---------- calculator ---------- */
+.calc{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.panel{background:rgba(9,24,19,.82);border:1px solid var(--line);border-radius:24px;padding:clamp(22px,3vw,34px)}
+.panel h4{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px}
+.sl{margin-bottom:18px}
+.sl .top{display:flex;justify-content:space-between;font-size:14.5px;margin-bottom:8px;color:var(--ink2)}
+.sl .top b{font-family:var(--mono);color:var(--ink);font-weight:600}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--lime) var(--p,50%),rgba(255,255,255,.12) var(--p,50%));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--ink);border:4px solid var(--lime);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:var(--ink);border:4px solid var(--lime);cursor:pointer}
+.sub-h{font-size:13px;color:var(--muted);margin:22px 0 14px;padding-top:18px;border-top:1px solid var(--line)}
+.out-big{font-family:var(--serif);font-size:clamp(46px,5.4vw,74px);line-height:1;letter-spacing:-.03em;color:var(--lime)}
+.out-sub{font-size:14.5px;color:var(--ink2);margin-top:8px}
+.kpis{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:24px 0}
+.kpi{border:1px solid var(--line);border-radius:14px;padding:14px}
+.kpi b{font-family:var(--mono);font-size:18px;display:block}
+.kpi span{font-size:12px;color:var(--muted)}
+.lv{display:grid;gap:10px}
+.lvr{display:grid;grid-template-columns:150px 1fr 90px;gap:12px;align-items:center;font-size:13.5px}
+.lvr .t{height:10px;border-radius:6px;background:rgba(255,255,255,.05);overflow:hidden}
+.lvr .t i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--mint),var(--lime));transition:width .6s cubic-bezier(.2,.7,.2,1)}
+.lvr b{font-family:var(--mono);text-align:right;font-weight:500}
+.note{font-size:12.5px;color:var(--muted);margin-top:18px}
+@media(max-width:900px){.calc{grid-template-columns:1fr}}
+@media(max-width:520px){.lvr{grid-template-columns:110px 1fr 78px}.kpis{grid-template-columns:1fr 1fr}}
+
+/* ---------- roadmap ---------- */
+.road{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.road::before{content:"";position:absolute;left:0;right:0;top:20px;height:2px;background:var(--line)}
+.road .fill{position:absolute;left:0;top:20px;height:2px;width:0;background:linear-gradient(90deg,var(--mint),var(--lime));transition:width 2.6s cubic-bezier(.3,.7,.2,1)}
+.road.in .fill{width:100%}
+.step{position:relative;padding-top:54px}
+.step .pin{position:absolute;top:10px;left:0;width:22px;height:22px;border-radius:50%;background:var(--bg);border:2px solid var(--lime);box-shadow:0 0 0 6px rgba(212,242,122,.1)}
+.step .wk{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.1em}
+.step h4{font-size:18px;margin:6px 0 8px;font-family:var(--serif);font-weight:400}
+.step ul{list-style:none;display:grid;gap:6px}
+.step li{font-size:13.5px;color:var(--ink2)}
+@media(max-width:980px){.road{grid-template-columns:1fr;gap:6px}.road::before,.road .fill{left:10px;right:auto;width:2px;top:0;bottom:0;height:auto}.road.in .fill{width:2px;height:100%}.road .fill{height:0;transition:height 2.6s}.step{padding:0 0 26px 44px}.step .pin{top:2px}}
+
+/* ---------- pricing ---------- */
+.pricing{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pc{background:rgba(9,24,19,.82);border:1px solid var(--line);border-radius:24px;padding:30px 26px;display:flex;flex-direction:column}
+.pc .k{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.12em}
+.pc h3{margin:8px 0 6px;font-size:26px}
+.pc .d{font-size:14px;color:var(--ink2);min-height:44px}
+.pc .price{margin:20px 0 4px;font-family:var(--serif);font-size:40px;letter-spacing:-.02em;line-height:1}
+.pc .price small{font-family:var(--sans);font-size:14px;color:var(--muted);letter-spacing:0}
+.pc .mo{font-family:var(--mono);font-size:13.5px;color:var(--ink2)}
+.pc ul{list-style:none;margin:20px 0 0;display:grid;gap:9px;flex:1}
+.pc li{font-size:14px;color:var(--ink2);padding-left:22px;position:relative}
+.pc li::before{content:"✓";position:absolute;left:0;color:var(--lime);font-weight:800;font-size:13px}
+.bundle{margin-top:18px;display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:center;padding:30px 34px;border-radius:26px;background:linear-gradient(120deg,rgba(212,242,122,.16),rgba(111,227,193,.07));border:1px solid rgba(212,242,122,.45)}
+.bundle h3{font-size:clamp(26px,3vw,36px)}
+.bundle p{color:var(--ink2);margin-top:8px}
+.bundle .bp{text-align:right}
+.bundle .bp b{font-family:var(--serif);font-size:clamp(34px,3.6vw,46px);font-weight:400;display:block;line-height:1}
+.bundle .bp span{font-family:var(--mono);font-size:13px;color:var(--ink2)}
+@media(max-width:960px){.pricing{grid-template-columns:1fr}.bundle{grid-template-columns:1fr}.bundle .bp{text-align:left}}
+.terms{margin-top:16px;font-size:13px;color:var(--muted)}
+
+/* ---------- about ---------- */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.cred{display:grid;gap:12px}
+.cr{display:flex;gap:16px;align-items:flex-start;padding:18px 20px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.cr .n{flex:none;font-family:var(--mono);color:var(--lime);font-size:13px;margin-top:2px}
+.cr b{display:block;font-size:15.5px}
+.cr span{font-size:14px;color:var(--ink2)}
+.proof{border-radius:24px;overflow:hidden;border:1px solid var(--line2);background:linear-gradient(160deg,#10271f,#0a1814)}
+.proof .in{padding:30px}
+.proof .k{font-family:var(--mono);font-size:12px;color:var(--lime);letter-spacing:.12em}
+.proof h3{margin:10px 0 10px}
+.proof p{color:var(--ink2);font-size:15px}
+.proof .mini{margin:22px 30px 0;border-radius:14px 14px 0 0;background:#f6f4ec;color:#1b2a24;padding:18px 20px 22px;font-size:12.5px;font-family:var(--sans);box-shadow:0 -10px 40px rgba(0,0,0,.3)}
+.mini .hd{display:flex;justify-content:space-between;border-bottom:2px solid #1d5c47;padding-bottom:8px;margin-bottom:10px}
+.mini .hd b{font-family:var(--serif);font-size:16px;color:#1d5c47}
+.mini .rx{font-family:var(--serif);font-size:22px;color:#1d5c47}
+.mini .ln{height:7px;border-radius:4px;background:#dcd8cb;margin:7px 0}
+.mini .hi2{font-family:var(--hi);font-size:12.5px;color:#3c4b44}
+@media(max-width:900px){.about{grid-template-columns:1fr}}
+
+/* ---------- close ---------- */
+.close{text-align:center;padding-bottom:80px}
+.close h2{margin-left:auto;margin-right:auto;max-width:18ch}
+.close .lead{margin:0 auto}
+.next{margin:46px auto 0;max-width:900px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:left}
+.nx{padding:22px;border-radius:18px;border:1px solid var(--line);background:var(--card)}
+.nx .n{font-family:var(--mono);color:var(--lime);font-size:13px}
+.nx b{display:block;margin:6px 0 4px}
+.nx span{font-size:14px;color:var(--ink2)}
+@media(max-width:760px){.next{grid-template-columns:1fr}}
+.contact{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:40px}
+footer{padding:40px clamp(18px,4vw,44px) 60px;border-top:1px solid var(--line)}
+footer .wrap{display:grid;gap:18px}
+footer details{font-size:13px;color:var(--muted)}
+footer summary{cursor:pointer;font-family:var(--mono);letter-spacing:.06em;color:var(--ink2)}
+footer ol{margin:14px 0 0 18px;display:grid;gap:4px}
+footer ol a{color:var(--muted);word-break:break-word}
+footer .fine{font-size:12.5px;color:var(--muted);line-height:1.6}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .rv{opacity:1;transform:none}
+  .hero h1 .line span{transform:none}.hindi-tag,.hero .lead,.hero-cta{opacity:1;transform:none}
+  .msg{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div id="stage" aria-hidden="true"><canvas id="gl"></canvas></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Back to top">
+    <span class="brand-mark"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 1h6v6h6v6h-6v6H7v-6H1V7h6z" fill="#0b1d17"/></svg></span>
+    <span><b>Digital Hospital Blueprint</b><small>for I.T. Memorial · Muzaffarpur</small></span>
+  </a>
+  <nav class="nav-links" aria-label="Sections">
+    <a href="#today">Today</a><a href="#why-now">Why now</a><a href="#ecosystem">How it works</a><a href="#market">Market</a><a href="#audit">Audit</a><a href="#blueprint">Blueprint</a><a href="#impact">Impact</a><a href="#roadmap">Roadmap</a><a href="#investment">Investment</a>
+  </nav>
+  <a class="nav-cta" href="#next">Next steps</a>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" id="hero" data-shape="cross" data-side="right">
+  <div class="wrap">
+    <div class="hero-meta">
+      <span class="chip">Proposal · November 2026</span>
+      <span class="chip">I.T. Memorial Hospital · Bhikhanpur, NH-57</span>
+    </div>
+    <h1><span class="line"><span>Same trusted care.</span></span><span class="line"><span><em>Now</em></span></span><span class="line"><span><em>digital-first.</em></span></span></h1>
+    <p class="hindi-tag">भरोसा वही, अनुभव डिजिटल।</p>
+    <p class="lead">A 90-day blueprint for I.T. Memorial Hospital: stay ABDM-compliant for PM-JAY, stop revenue leakage at billing, and bring more patients in through WhatsApp, Google and an AI co-pilot that speaks Hindi.</p>
+    <div class="hero-cta">
+      <a class="btn primary" href="#today">Explore the blueprint <span class="arr">→</span></a>
+      <a class="btn" href="#impact">Calculate your impact</a>
+    </div>
+  </div>
+  <div class="hero-foot"><span>Prepared by Chiranjeev Kumar · GenAI engineer</span><span class="scrollcue">SCROLL <i></i></span></div>
+</section>
+
+<!-- TODAY -->
+<section id="today" data-shape="cross" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">01 · Where you stand</span>
+      <h2 class="rv d1">A hospital people <em>already trust.</em></h2>
+      <p class="lead rv d2">On NH-57 next to SKMCH, with 24×7 emergency and super-specialists in neurosurgery, gastroenterology and urology under one roof. The foundation is strong.</p>
+    </div>
+    <div class="stats rv d2">
+      <div class="stat"><div class="n"><span data-count="4.3" data-dec="1">0</span><small>★</small></div><p>Google rating from about <b>226 reviews</b></p></div>
+      <div class="stat"><div class="n"><span data-count="18">0</span></div><p>Visiting specialists on the published roster</p></div>
+      <div class="stat"><div class="n"><span data-count="13">0</span></div><p>Specialities, from neurosurgery to ERCP</p></div>
+      <div class="stat"><div class="n">24<small>×7</small></div><p>Emergency, trauma, ICU and pharmacy</p></div>
+      <div class="stat"><div class="n"><span data-count="2016">0</span></div><p>Start year in the national PM-JAY hospital registry</p></div>
+    </div>
+    <p class="src rv">Sources: Google Business Profile, itmemorialhospital.in, national PM-JAY (HEM) registry · checked 24 Nov 2026</p>
+    <div class="quote-band">
+      <blockquote class="rv">Patients already trust you. The opportunity is to make that trust <em>visible, bookable and measurable</em>, and to turn every visit into data the hospital can run on.</blockquote>
+      <div class="review-stack">
+        <div class="review rv d1"><div class="stars">★★★★★</div>“High quality treatment and super specialist doctor and staff”</div>
+        <div class="review rv d2"><div class="stars">★★★★★</div>“Best quality of service with affordable price”</div>
+        <div class="review rv d3"><div class="stars">★★★★★</div>“Fab facilities and staff behaviour is so good”</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY NOW -->
+<section id="why-now" data-shape="shield" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">02 · Why now</span>
+      <h2 class="rv d1">For PM-JAY hospitals, digital is now <em>mandatory.</em></h2>
+      <p class="lead rv d2">Bihar has made ABDM-compliant hospital software a condition for private hospitals that treat Ayushman patients. Getting this right protects your income, and it can also earn incentive payments.</p>
+    </div>
+    <div class="mandate">
+      <div class="m-main rv">
+        <span class="pulse" aria-hidden="true"></span>
+        <span class="tag">Bihar Swasthya Suraksha Samiti · Letter No. 16</span>
+        <h3>“Mandatory adoption of ABDM-Compliant HMIS” for all PM-JAY-empanelled private hospitals in Bihar.</h3>
+        <p>The deadline was extended to 20 January 2026 (letter dated 2 February 2026). Industry reading of the directive: integrate with ABDM or risk de-empanelment.</p>
+        <p class="src">Source: biswass.bihar.gov.in → Letters</p>
+      </div>
+      <div class="m-side">
+        <div class="m-item rv d1"><b>NMC · 2026</b><span>HMIS–ABDM integration made mandatory for medical colleges' hospitals, with a list of empanelled ABDM software to choose from.</span></div>
+        <div class="m-item rv d2"><b>NHA · 2026</b><span>HMIS–ABDM integration announced as a mandatory requirement; the National Health Claims Exchange can speed up claim settlement.</span></div>
+        <div class="m-item rv d3"><b>DHIS incentive</b><span>NHA's Digital Health Incentive Scheme pays hospitals for every ABHA-linked record above a monthly threshold.</span></div>
+      </div>
+    </div>
+    <div class="milestones" id="ms">
+      <div class="fill"></div>
+      <div class="ms rv"><div class="dot">M1</div><h4>ABHA at the front desk</h4><p>Create or verify each patient's ABHA during registration, including Scan &amp; Share at the counter.</p></div>
+      <div class="ms rv d1"><div class="dot">M2</div><h4>Link every record</h4><p>Prescriptions, lab reports and discharge summaries go to the patient's ABHA as standard FHIR records, with consent.</p></div>
+      <div class="ms rv d2"><div class="dot">M3</div><h4>Fetch past history</h4><p>With consent, pull a referred patient's earlier reports from other hospitals. Doctors see the full picture.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section id="ecosystem" data-shape="sphere" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">03 · How a digital hospital works</span>
+      <h2 class="rv d1">One patient. <em>One record.</em> Every department.</h2>
+      <p class="lead rv d2">A hospital information system (HIS/HMIS) is a set of connected modules around a single patient ID. Select a module to see what it does and where the money is.</p>
+    </div>
+    <div class="eco">
+      <svg class="eco-svg rv" id="ecoSvg" viewBox="-130 -20 860 640" role="img" aria-label="Hospital software modules arranged around one patient record"></svg>
+      <div><div class="eco-chips" id="ecoChips"></div><div class="eco-panel rv d1" id="ecoPanel" aria-live="polite"></div></div>
+    </div>
+    <div class="deploy">
+      <div class="dp rv"><h4>Cloud SaaS</h4><p>Vendor hosts the software; you pay monthly. Fast to start and always up to date. Needs two internet lines.</p></div>
+      <div class="dp rec rv d1"><h4>Hybrid <span class="badge">Recommended</span></h4><p>Cloud HMIS with offline fallback for billing, pharmacy and front desk, built for real power and internet conditions in Bihar.</p></div>
+      <div class="dp rv d2"><h4>On-premise</h4><p>Local server, one-time licence plus a yearly AMC. Full control, but more upkeep and hardware risk.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- MARKET -->
+<section id="market" data-shape="bars" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">04 · What the market charges</span>
+      <h2 class="rv d1">The software is a <em>commodity.</em></h2>
+      <p class="lead rv d2">Monthly price ranges published for Indian hospital software in 2026. The spread is wide because "HMS" can mean anything from an appointment book to a full clinical, billing and insurance platform.</p>
+    </div>
+    <div class="range" id="range"></div>
+    <div class="axis"><span></span><div class="ticks" id="ticks"></div></div>
+    <p class="src">Sources: Approids, Cufront, ICG (2026 cost guides); Capterra (Practo Insta IP plan: $40/user/month, minimum 20 users ≈ ₹70k+); one-time licences add AMC.</p>
+    <div class="vendors" id="vendors"></div>
+    <div class="insight rv">
+      <span class="ic">!</span>
+      <p>Licences are cheap and getting cheaper. What tier-2 Bihar hospitals lack is <em>local implementation, Hindi-first patient engagement on WhatsApp, and AI that saves doctors' time</em>. That is where this proposal focuses.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIT -->
+<section id="audit" data-shape="sphere" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">05 · Your digital front door today</span>
+      <h2 class="rv d1">A good website. <em>Not yet a revenue engine.</em></h2>
+      <p class="lead rv d2">itmemorialhospital.in is fast, modern and has a working appointment request. We checked it against what patients in Muzaffarpur actually look for before choosing a hospital.</p>
+    </div>
+    <div class="audit">
+      <div class="score rv">
+        <svg viewBox="0 0 210 210" aria-hidden="true"><defs><linearGradient id="sg" x1="0" x2="1"><stop offset="0" stop-color="#6fe3c1"/><stop offset="1" stop-color="#d4f27a"/></linearGradient></defs><circle class="bg" cx="105" cy="105" r="95"/><circle class="fg" id="scoreArc" cx="105" cy="105" r="95"/></svg>
+        <div class="val"><span id="scoreVal">0</span>/<span id="scoreMax">0</span><small>CHECKS PASSED</small></div>
+        <p>Full credit for each pass, half for a partial.</p>
+        <div class="legend"><span><i style="background:var(--mint)"></i>Pass</span><span><i style="background:var(--amber)"></i>Partial</span><span><i style="border:1px solid var(--coral)"></i>Gap</span></div>
+      </div>
+      <div class="checks" id="checks"></div>
+    </div>
+    <div class="nap rv">
+      <h4>Your hospital's details differ across the web</h4>
+      <p class="muted" style="font-size:14.5px">Google ranks local businesses partly on consistent name, address and phone. Across public listings we found five different numbers, two Facebook pages, two PIN codes, and an old directory profile showing 41 doctors.</p>
+      <div class="row">
+        <span class="ph ok">93345 00482<small>WEBSITE · GOOGLE</small></span>
+        <span class="ph">99345 00482<small>DIRECTORIES</small></span>
+        <span class="ph">91024 06023<small>PM-JAY REGISTRY</small></span>
+        <span class="ph">91024 06007<small>MEDDCO</small></span>
+        <span class="ph">79707 02260<small>FACEBOOK PAGE 2</small></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BLUEPRINT -->
+<section id="blueprint" data-shape="helix" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">06 · The blueprint</span>
+      <h2 class="rv d1">Three layers. <em>One partner.</em></h2>
+      <p class="lead rv d2">Buy what's already a commodity, build what sets you apart. A certified HMIS keeps you compliant; a growth layer and an AI co-pilot are what make the hospital earn more.</p>
+    </div>
+    <div class="layers">
+      <div class="stack rv" id="stack">
+        <div class="plate p1" data-l="0"><span>Core</span></div>
+        <div class="plate p2" data-l="1"><span>Growth</span></div>
+        <div class="plate p3" data-l="2"><span>AI</span></div>
+      </div>
+      <div class="lcards" id="lcards">
+        <div class="lc rv" data-l="2"><div class="top"><span class="k">LAYER 3 · INTELLIGENCE</span><span class="chip">Our edge</span></div><h3>AI co-pilot in Hindi</h3><p>Saves doctor and front-desk time, and makes sure claims are complete before they are submitted.</p><ul><li>Voice → prescription</li><li>AI discharge summaries</li><li>PM-JAY claim checker</li><li>Lab report explainer</li><li>Owner WhatsApp digest</li></ul></div>
+        <div class="lc rv d1" data-l="1"><div class="top"><span class="k">LAYER 2 · GROWTH</span><span class="chip">Weeks 1–4</span></div><h3>Digital front door</h3><p>Turns your reputation into bookings, and keeps follow-up patients coming back.</p><ul><li>Bilingual website 2.0</li><li>20+ specialty &amp; procedure pages</li><li>WhatsApp booking &amp; reminders</li><li>Reports on WhatsApp</li><li>Review engine</li><li>One consistent listing everywhere</li></ul></div>
+        <div class="lc rv d2" data-l="0"><div class="top"><span class="k">LAYER 1 · COMPLIANCE CORE</span><span class="chip">Weeks 2–10</span></div><h3>ABDM-certified HMIS</h3><p>We audit what you have or run a short vendor shoot-out, then own the implementation, training and go-live.</p><ul><li>ABHA M1–M3</li><li>OPD · IPD · OT · nursing</li><li>Lab &amp; radiology</li><li>Pharmacy &amp; inventory</li><li>Billing, packages, PM-JAY / TPA desk</li></ul></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI SHOWCASE -->
+<section id="ai" data-shape="helix" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="ai">
+      <div class="phone rv" aria-label="WhatsApp conversation example">
+        <div class="scr">
+          <div class="wa-top"><span class="av">ITM</span><span><b>I.T. Memorial Hospital</b><small>WhatsApp Business · online</small></span></div>
+          <div class="wa-body" id="wa">
+            <div class="msg out hi">नमस्ते, कल हड्डी के डॉक्टर से दिखाना है<span class="t">8:02 PM</span></div>
+            <div class="msg in">Dr. Abhishek Kumar (Orthopaedics, MS) कल 2–8 PM उपलब्ध हैं। कौन सा समय ठीक रहेगा?<div class="btns"><span>2–4 PM</span><span>4–6 PM</span><span>6–8 PM</span></div><span class="t">8:02 PM</span></div>
+            <div class="msg out">4–6 PM<span class="t">8:03 PM</span></div>
+            <div class="msg in">✅ बुक हो गया। टोकन <b>#14</b>, कल 4:40 PM के आसपास। पुरानी रिपोर्ट साथ लाएँ। कल सुबह याद दिला देंगे।<span class="t">8:03 PM</span></div>
+            <div class="typing" id="typing"><i></i><i></i><i></i></div>
+            <div class="msg in">📄 आपकी X-Ray रिपोर्ट तैयार है: <u>Report.pdf</u><br>डॉ. अभिषेक आज 4–6 PM में इसे समझाएँगे। ज़रूरत हो तो यहीं जवाब दें।<span class="t">Next day</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="eyebrow rv">07 · The AI co-pilot</span>
+        <h2 class="rv d1">AI that speaks <em>your patients' language.</em></h2>
+        <p class="lead rv d2">Built on Arogya Rx, a Hindi-first prescription and clinic app already working with a practising physician, and extended for a multi-specialty hospital.</p>
+        <div class="ai-grid">
+          <div class="aic rv"><div class="ico">Rx</div><b>Voice to prescription</b><p>The doctor speaks in Hindi or English; a structured, generic-first prescription is ready to sign in seconds.</p></div>
+          <div class="aic rv d1"><div class="ico">DS</div><b>Discharge summaries</b><p>Drafted from IPD notes, checked by the doctor, and linked to ABHA (M2) in one click.</p></div>
+          <div class="aic rv d2"><div class="ico">₹</div><b>PM-JAY claim checker</b><p>Flags missing documents, photos and package mismatches before pre-auth and claim submission.</p></div>
+          <div class="aic rv d3"><div class="ico">◎</div><b>Owner digest</b><p>Every night on WhatsApp: OPD, admissions, collections, pending claims, beds and doctor-wise revenue.</p></div>
+        </div>
+        <p class="guard rv">Guardrails: AI drafts, doctors decide · data hosted in India · consent and audit logs · DPDP Act-ready</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact" data-shape="bars" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">08 · Revenue impact</span>
+      <h2 class="rv d1">What it could be worth <em>every month.</em></h2>
+      <p class="lead rv d2">Move the sliders to match the hospital's real numbers. Defaults are illustrative and deliberately conservative.</p>
+    </div>
+    <div class="calc">
+      <div class="panel rv" id="inputs">
+        <h4>Your hospital</h4>
+      </div>
+      <div class="panel rv d1">
+        <h4>Estimated monthly gain</h4>
+        <div class="out-big" id="gain">₹0</div>
+        <div class="out-sub" id="gainSub">per month · ₹0 per year</div>
+        <div class="kpis">
+          <div class="kpi"><b id="kBill">₹0</b><span>Monthly billing</span></div>
+          <div class="kpi"><b id="kCost">₹0</b><span>Monthly investment</span></div>
+          <div class="kpi"><b id="kRoi">0×</b><span>Return on spend</span></div>
+        </div>
+        <div class="lv" id="levers"></div>
+        <p class="note">Model: charge capture on IPD billing; pharmacy assumed at 25% of IPD billing; DHIS at ~₹5 per linked record above 100 a month (capped); fewer PM-JAY deductions; more OPD visits from reminders and recall; extra admissions from Google, WhatsApp and specialty pages; pharmacy expiry savings; DHIS incentives. We set a baseline in week 1 and measure against it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" data-shape="ring" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">09 · 90-day roadmap</span>
+      <h2 class="rv d1">Visible wins in <em>week two.</em></h2>
+      <p class="lead rv d2">Quick wins first so the team sees results, then the core system, then AI. Each phase ends with something you can measure.</p>
+    </div>
+    <div class="road" id="road">
+      <div class="fill"></div>
+      <div class="step rv"><span class="pin"></span><span class="wk">WEEK 0–1</span><h4>Discover</h4><ul><li>Workflow walk-through</li><li>Current software audit</li><li>Baseline KPIs</li></ul></div>
+      <div class="step rv d1"><span class="pin"></span><span class="wk">WEEK 1–4</span><h4>Quick wins</h4><ul><li>One phone number everywhere</li><li>Google profile tuned</li><li>WhatsApp live</li><li>Website 2.0, v1</li></ul></div>
+      <div class="step rv d2"><span class="pin"></span><span class="wk">WEEK 2–6</span><h4>Core set-up</h4><ul><li>HMIS decision</li><li>IT infrastructure check</li><li>Tariffs, packages, masters</li></ul></div>
+      <div class="step rv d3"><span class="pin"></span><span class="wk">WEEK 6–10</span><h4>Go-live</h4><ul><li>Front desk → OPD → billing</li><li>Pharmacy, lab, IPD</li><li>ABDM M1/M2 live</li></ul></div>
+      <div class="step rv d4"><span class="pin"></span><span class="wk">WEEK 8–12</span><h4>AI + review</h4><ul><li>Co-pilot pilot</li><li>Owner dashboard</li><li>Results vs baseline</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTMENT -->
+<section id="investment" data-shape="cross" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">10 · Investment</span>
+      <h2 class="rv d1">Start small. <em>Scale with results.</em></h2>
+      <p class="lead rv d2">Each package stands on its own, and together they cost less. HMIS licence fees are passed through at vendor cost with no markup.</p>
+    </div>
+    <div class="pricing" id="pricing"></div>
+    <div class="bundle rv">
+      <div><span class="eyebrow">Founding partner · first hospital in Muzaffarpur</span><h3 style="margin-top:12px">All three layers, <em style="color:var(--lime)">with the AI co-pilot free for two months.</em></h3><p>Priority support from someone who is from the region, and a say in what we build next.</p></div>
+      <div class="bp" id="bundlePrice"></div>
+    </div>
+    <p class="terms">Suggested terms: 40% at start, 40% at go-live, 20% after 30 days of support. Monthly fees begin after go-live. GST extra. WhatsApp message charges billed at Meta's cost (about ₹0.12 per utility message).</p>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" data-shape="sphere" data-side="right" data-dim="1">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow rv">11 · Who you'd be working with</span>
+      <h2 class="rv d1">Enterprise-grade AI, <em>delivered locally.</em></h2>
+    </div>
+    <div class="about">
+      <div class="cred">
+        <div class="cr rv"><span class="n">01</span><div><b>6+ years building production AI</b><span>GenAI engineer in Bengaluru, leading delivery of RAG systems, AI agents and MCP integrations for enterprise clients.</span></div></div>
+        <div class="cr rv d1"><span class="n">02</span><div><b>Healthcare builder from Bihar</b><span>Co-founder of Arogya Sahayak, which digitises rural and semi-urban clinics in Bihar. I understand the patients, the staff and the power cuts.</span></div></div>
+        <div class="cr rv d2"><span class="n">03</span><div><b>Arogya Rx, already working</b><span>Hindi-first prescriptions, voice and photo intake, WhatsApp delivery, online booking and billing, live with a practising physician.</span></div></div>
+        <div class="cr rv d3"><span class="n">04</span><div><b>CSE, BIT Mesra · two master's degrees</b><span>LJMU and IIIT Bangalore. Engineering rigour plus a focus on business results.</span></div></div>
+      </div>
+      <div class="proof rv d1">
+        <div class="in">
+          <span class="k">LIVE PROOF</span>
+          <h3>Try the Arogya Rx demo</h3>
+          <p>OPD queue, voice intake, Hindi WhatsApp parchi, letterhead studio. The same building blocks your doctors would use.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px">
+            <a class="btn primary" href="../arogya-rx/demo/" target="_blank" rel="noopener">Open the demo <span class="arr">↗</span></a>
+            <a class="btn" href="../arogya-rx/" target="_blank" rel="noopener">Arogya Rx site</a>
+          </div>
+        </div>
+        <div class="mini" aria-hidden="true">
+          <div class="hd"><b>I.T. Memorial Hospital</b><span>OPD · Token 14</span></div>
+          <div class="rx">℞</div>
+          <div class="ln" style="width:82%"></div><div class="ln" style="width:64%"></div><div class="ln" style="width:72%"></div>
+          <div class="hi2">सलाह: दवा खाना खाने के बाद लें · 7 दिन बाद दिखाएँ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSE -->
+<section class="close" id="next" data-shape="cross" data-side="center" data-dim="0">
+  <div class="wrap">
+    <span class="eyebrow rv">12 · Next steps</span>
+    <h2 class="rv d1">Let's make I.T. Memorial <em>the most connected hospital</em> in north Bihar.</h2>
+    <p class="lead rv d2">Start with a two-week discovery and quick-win sprint. You'll get a baseline report and visible improvements before deciding anything bigger.</p>
+    <div class="next">
+      <div class="nx rv"><span class="n">01</span><b>45-minute walk-through</b><span>Front desk, billing, pharmacy and the PM-JAY desk, with the people who use them.</span></div>
+      <div class="nx rv d1"><span class="n">02</span><b>Baseline &amp; plan</b><span>Your real numbers in the calculator, the HMIS decision, and a fixed quote.</span></div>
+      <div class="nx rv d2"><span class="n">03</span><b>Quick-win sprint</b><span>WhatsApp, Google profile and website fixes live within two weeks.</span></div>
+    </div>
+    <div class="contact rv">
+      <a class="btn primary" href="https://wa.me/919546519953?text=Hello%20Chiranjeev%2C%20regarding%20the%20I.T.%20Memorial%20Hospital%20digital%20blueprint" target="_blank" rel="noopener">WhatsApp Chiranjeev <span class="arr">→</span></a>
+      <a class="btn" href="mailto:chiranjeevkumar47@gmail.com?subject=I.T.%20Memorial%20Hospital%20%E2%80%94%20Digital%20Hospital%20Blueprint">chiranjeevkumar47@gmail.com</a>
+      <a class="btn" href="https://linkedin.com/in/chiranjeev-kumar-07071997" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <details>
+      <summary>Sources and notes</summary>
+      <ol>
+        <li>Hospital website and doctor directory: <a href="https://itmemorialhospital.in/" target="_blank" rel="noopener">itmemorialhospital.in</a> (checked 24 Nov 2026)</li>
+        <li>Google Business Profile, Justdial, Facebook and Instagram listings for I.T. Memorial Hospital (checked 24 Nov 2026)</li>
+        <li>PM-JAY registry mirror: <a href="https://www.publicservicesmap.in/hospitals/centre/i-t-memorial-hospital-muzaffarpur-bihar-hosp10p86159" target="_blank" rel="noopener">publicservicesmap.in · HOSP10P86159</a></li>
+        <li>Bihar Swasthya Suraksha Samiti letters: <a href="https://biswass.bihar.gov.in/pages/letters.aspx" target="_blank" rel="noopener">biswass.bihar.gov.in</a></li>
+        <li>NMC on HMIS–ABDM integration: <a href="https://medicaldialogues.in/health-news/nmc/nmc-orders-medical-colleges-to-integrate-hmis-of-attached-hospitals-with-ayushman-bharat-digital-mission-portal-165965" target="_blank" rel="noopener">Medical Dialogues, Mar 2026</a></li>
+        <li>NHA review on ABDM: <a href="https://www.lokmattimes.com/national/nha-honours-states-uts-for-excellence-in-ab-pm-jay-and-abdm-implementation/" target="_blank" rel="noopener">Lokmat Times, Apr 2026</a></li>
+        <li>DHIS guidelines: <a href="https://abdm.gov.in/static/media/OperationalGuidelinesDHIS.a35651cdf843e0b399c2.pdf" target="_blank" rel="noopener">abdm.gov.in</a></li>
+        <li>HMS cost guides: <a href="https://www.approids.com/blog/hospital-management-software-cost-india-2026/" target="_blank" rel="noopener">Approids</a>, <a href="https://www.cufront.com/blog/hospital-management-software-pricing-india" target="_blank" rel="noopener">Cufront</a>, <a href="https://ichelonconsulting.com/best-healthcare-software-india" target="_blank" rel="noopener">ICG</a></li>
+        <li>Vendor pricing: <a href="https://www.capterra.com/p/130501/Insta-HMS/pricing/" target="_blank" rel="noopener">Capterra (Insta)</a>, <a href="https://www.capterra.in/software/177590/hospilogix" target="_blank" rel="noopener">Capterra India (HospiLogix)</a>, <a href="https://www.getapp.sg/software/2049133/smart-hospital" target="_blank" rel="noopener">GetApp (KareXpert)</a>, <a href="https://www.g2.com/products/mocdoc-hms/pricing" target="_blank" rel="noopener">G2 (MocDoc)</a></li>
+        <li>WhatsApp rates (India, 2026): <a href="https://whautomate.com/whatsapp-business-api-pricing-india" target="_blank" rel="noopener">Whautomate</a></li>
+        <li>Implementation guidance: <a href="https://nabh.co/digital-toolkit-for-hospitals/" target="_blank" rel="noopener">NABH Digital Toolkit for Hospitals</a></li>
+      </ol>
+    </details>
+    <p class="fine">Prepared by Chiranjeev Kumar as a proposal for I.T. Memorial Hospital, Muzaffarpur. All hospital details come from public sources and may be out of date; revenue figures are illustrative estimates, not guarantees. Product and vendor names belong to their owners. This is not an official I.T. Memorial Hospital page.</p>
+  </div>
+</footer>
+
+<script>
+/* ======================= CONFIG (edit prices here) ======================= */
+const CONFIG = {
+  packages: [
+    { k:'PACKAGE A', name:'Digital Front Door', d:'Reputation into bookings. Live in 2–4 weeks.', once:75000, monthly:9999, monthlyNote:'/ month + WhatsApp at cost',
+      items:['Bilingual website 2.0 with 20+ SEO pages','Doctor profiles, reviews, cashless page','WhatsApp booking, reminders, reports','Google profile and directory clean-up','Review engine with QR at discharge'] },
+    { k:'PACKAGE B', name:'Digital Hospital Core', d:'ABDM-compliant HMIS, implemented properly.', once:150000, onceTo:250000, monthly:7500, monthlyNote:'/ month support + licence at cost',
+      items:['HMIS audit or vendor shoot-out','Implementation, masters, data migration','Staff training and parallel run','ABHA M1/M2, PM-JAY desk set-up','Integration with Package A'] },
+    { k:'PACKAGE C', name:'AI Co-pilot', d:'Doctors save time and claims go in complete.', once:50000, monthly:19999, monthlyTo:29999, monthlyNote:'/ month',
+      items:['Hindi voice to prescription','AI discharge-summary drafts','PM-JAY claim document checker','Lab report explainer on WhatsApp','Owner dashboard and nightly digest'] }
+  ],
+  bundle: { once:'≈ ₹2.5–3 lakh', monthly:'≈ ₹45–60k / month + licence' },
+  monthlyInvestment: 60000  // used by the impact calculator
+};
+
+/* ======================= helpers ======================= */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const inr = n => '₹' + Math.round(n).toLocaleString('en-IN');
+const lakh = n => n >= 100000 ? '₹' + Number((n/100000).toFixed(n >= 1000000 ? 1 : 2)) + ' L' : inr(n);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ======================= nav + progress ======================= */
+const nav = $('#nav'), prog = $('#progress');
+const onScroll = () => {
+  nav.classList.toggle('solid', scrollY > 40);
+  const h = document.documentElement.scrollHeight - innerHeight;
+  prog.style.width = (h > 0 ? scrollY / h * 100 : 0) + '%';
+};
+addEventListener('scroll', onScroll, { passive:true }); onScroll();
+requestAnimationFrame(() => $('#hero').classList.add('go'));
+
+/* ======================= reveal + counters ======================= */
+const countUp = el => {
+  const to = parseFloat(el.dataset.count), dec = +el.dataset.dec || 0, dur = 1600, t0 = performance.now();
+  const step = t => { const p = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+    el.textContent = dec ? (to * e).toFixed(dec) : Math.round(to * e); if (p < 1) requestAnimationFrame(step); };
+  reduce ? el.textContent = dec ? to.toFixed(dec) : to : requestAnimationFrame(step);
+};
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (!e.isIntersecting) return;
+  const t = e.target; t.classList.add('in');
+  $$('[data-count]', t).forEach(c => { if (!c.dataset.done) { c.dataset.done = 1; countUp(c); } });
+  if (t.id === 'wa') playChat();
+  if (t.classList.contains('score')) animateScore();
+  io.unobserve(t);
+}), { threshold:.18, rootMargin:'0px 0px -6% 0px' });
+const observeAll = () => $$('.rv, .stats, #ms, #range, #road, #stack, #wa, .score').forEach(el => io.observe(el));
+
+/* ======================= ecosystem ======================= */
+const MODULES = [
+  { id:'FO', name:'Front office', k:'Registration', t:'Front office & ABHA', p:'Every patient gets one hospital ID (UHID) linked to their ABHA. Tokens, scheme checks and deposits start here.', b:['ABHA create or verify (M1)','Token and queue display','Ayushman / PM-RAHAT eligibility check','Visiting-consultant schedules'] },
+  { id:'OP', name:'OPD / EMR', k:'Consultation', t:'OPD & electronic records', p:'Doctors see history, write prescriptions and order tests. Every order flows to lab, pharmacy and billing automatically.', b:['Templates per speciality','Hindi or English prescriptions','Orders go straight to lab and pharmacy','Follow-up reminders on WhatsApp'] },
+  { id:'LB', name:'Laboratory', k:'LIS', t:'Lab information system', p:'Barcoded samples, analyser interfaces and validated reports, with no retyping and no lost slips.', b:['Sample barcode tracking','Analyser integration','Report to WhatsApp with OTP','Linked to ABHA (M2)'] },
+  { id:'RD', name:'Radiology', k:'RIS / PACS', t:'Radiology & imaging', p:'CT, X-ray and ultrasound orders, worklists and reports, with images available to the treating doctor.', b:['Modality worklist','Report templates','Image viewing for doctors','Turnaround tracking'] },
+  { id:'PH', name:'Pharmacy', k:'Stock', t:'Pharmacy & inventory', p:'Prescription-driven dispensing with batch, expiry and reorder control. A common source of silent leakage.', b:['Batch and expiry alerts','Indent to ward, issue to patient','Reorder levels','Margin reports'] },
+  { id:'IP', name:'IPD & nursing', k:'ADT', t:'Admissions, beds & nursing', p:'Live bed board, nursing notes, medication charts and daily charges that post to the bill as they happen.', b:['Bed occupancy board','Nursing notes and MAR','Auto daily charges','Discharge summary → ABHA'] },
+  { id:'OT', name:'OT', k:'Surgery', t:'Operation theatre', p:'OT scheduling for visiting surgeons, checklists, consumables and implant tracking, all charged correctly.', b:['Surgeon and OT calendar','WHO checklist','Consumables to bill','Anaesthesia records'] },
+  { id:'BL', name:'Billing', k:'RCM', t:'Billing & revenue cycle', p:'Packages, deposits, GST, refunds and consultant payouts. This is where leakage is stopped and cash flow is tracked.', b:['Package and tariff masters','Interim and final bills','Doctor-wise payouts','Collection vs billing'] },
+  { id:'PM', name:'PM-JAY / TPA', k:'Claims', t:'Insurance & PM-JAY desk', p:'Pre-auth, documents and claims for PM-JAY, PM-RAHAT and private TPAs, with an AI check before submission.', b:['Document checklist per package','Pre-auth tracking','Deduction and rejection analysis','Claim ageing dashboard'] },
+  { id:'AB', name:'ABDM gateway', k:'Compliance', t:'ABDM connection', p:'The certified connection to the national digital health network: HFR, HPR, ABHA, consent and record sharing.', b:['Facility and doctor registry','Consent manager','FHIR record sharing','DHIS incentive tracking'] },
+  { id:'WA', name:'WhatsApp & web', k:'Engagement', t:'Patient engagement layer', p:'Website, Google profile and WhatsApp in front of the HMIS: bookings in, reminders and reports out.', b:['Hindi booking bot','Reminders and recall','Reports and bills on WhatsApp','Review requests'] },
+  { id:'DB', name:'Owner dashboard', k:'MIS', t:'Command centre', p:'One screen and one nightly WhatsApp digest for the owner: footfall, admissions, collections, claims and beds.', b:['Daily and monthly MIS','Doctor and department revenue','Claims pipeline','Alerts on anomalies'] }
+];
+function buildEco(){
+  const svg = $('#ecoSvg'), NS = 'http://www.w3.org/2000/svg', cx = 300, cy = 300, R = 228;
+  const mk = (tag, attrs, parent=svg) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; };
+  mk('circle', { class:'ring', cx, cy, r:R }); mk('circle', { class:'ring', cx, cy, r:140, 'stroke-dasharray':'2 6' });
+  const spokes = [], nodes = [];
+  MODULES.forEach((m, i) => {
+    const a = -Math.PI/2 + i * 2*Math.PI/MODULES.length, x = cx + R*Math.cos(a), y = cy + R*Math.sin(a);
+    spokes.push(mk('line', { class:'spoke', x1:cx, y1:cy, x2:x, y2:y }));
+    const g = mk('g', { class:'node', tabindex:0, role:'button', 'aria-label':m.t });
+    mk('circle', { cx:x, cy:y, r:29 }, g);
+    const ic = mk('text', { class:'ico', x, y:y+5, 'text-anchor':'middle' }, g); ic.textContent = m.id;
+    const out = Math.cos(a), lx = x + out*40, ly = y + Math.sin(a)*42 + 5;
+    const tx = mk('text', { x: Math.abs(out) < .2 ? x : lx, y: Math.abs(out) < .2 ? (y < cy ? y-40 : y+52) : ly, 'text-anchor': Math.abs(out) < .2 ? 'middle' : (out > 0 ? 'start' : 'end') }, g);
+    tx.textContent = m.name;
+    g.addEventListener('click', () => sel(i)); g.addEventListener('mouseenter', () => sel(i));
+    g.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); sel(i); } });
+    nodes.push(g);
+  });
+  const core = mk('g', { class:'core' });
+  mk('circle', { cx, cy, r:104 }, core);
+  const t1 = mk('text', { x:cx, y:cy-2, 'text-anchor':'middle' }, core); t1.textContent = 'One patient record';
+  const t2 = mk('text', { class:'sub', x:cx, y:cy+22, 'text-anchor':'middle' }, core); t2.textContent = 'UHID + ABHA';
+  const orb = mk('circle', { class:'orbit', r:4, cx:cx+140, cy });
+  if (!reduce) { let a = 0; (function spin(){ a += .006; orb.setAttribute('cx', cx + 140*Math.cos(a)); orb.setAttribute('cy', cy + 140*Math.sin(a)); requestAnimationFrame(spin); })(); }
+  const panel = $('#ecoPanel'), chipBox = $('#ecoChips');
+  const chips = MODULES.map((m, i) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = m.name; b.addEventListener('click', () => sel(i)); chipBox.appendChild(b); return b; });
+  function sel(i){
+    nodes.forEach((n, j) => n.classList.toggle('on', i === j)); spokes.forEach((s, j) => s.classList.toggle('on', i === j)); chips.forEach((c, j) => c.classList.toggle('on', i === j));
+    const m = MODULES[i];
+    panel.innerHTML = `<span class="k">${m.k}</span><h3>${m.t}</h3><p>${m.p}</p><ul>${m.b.map(x => `<li>${x}</li>`).join('')}</ul><p class="hint">${i+1} / ${MODULES.length} · select another module</p>`;
+  }
+  sel(0);
+}
+
+/* ======================= market ======================= */
+const RANGES = [
+  { l:'Clinic / OPD software', s:'Approids', a:500, b:2500 },
+  { l:'Small hospital, 5–50 beds', s:'Cufront · Approids', a:8000, b:30000 },
+  { l:'Multi-speciality, 50–200 beds', s:'Approids', a:30000, b:120000 },
+  { l:'50-bed HMS, enterprise view', s:'ICG', a:50000, b:200000, cls:'alt' },
+  { l:'Practo Insta, IP plan (20 users)', s:'Capterra', a:67000, b:72000, cls:'hot', label:'≈ ₹70k+' }
+];
+function buildMarket(){
+  const lo = Math.log10(300), hi = Math.log10(300000), pos = v => (Math.log10(v) - lo) / (hi - lo) * 100;
+  const wrap = $('#range');
+  RANGES.forEach((r, i) => {
+    const row = document.createElement('div'); row.className = 'rrow';
+    const left = pos(r.a), width = Math.max(1.6, pos(r.b) - left);
+    const label = r.label || `${lakh(r.a)} – ${lakh(r.b)}`, lft = pos(r.b) > 75 ? ' lft' : '';
+    row.innerHTML = `<div class="lbl"><b>${r.l}</b><span>${r.s}<span class="mr"> · ${label}</span></span></div><div class="track"><div class="bar ${r.cls||''}${lft}" style="left:${left}%;width:${width}%;transition-delay:${i*.15}s"><em>${label}</em></div></div>`;
+    wrap.appendChild(row);
+  });
+  const ticks = $('#ticks');
+  [1000, 10000, 100000].forEach(v => { const s = document.createElement('span'); s.style.left = pos(v) + '%'; s.textContent = lakh(v) + '/mo'; ticks.appendChild(s); });
+  const V = [
+    ['Practo Insta','$25–40 / user / month','Established hospital HMS; minimum 5 users (OP) or 20 users (IP).'],
+    ['KareXpert','Quote-based','Jio-backed cloud HIMS; 520+ hospitals; priced by edition, beds and modules.'],
+    ['MocDoc','Quote-based, per user','Popular with labs and mid-size hospitals; about one month to implement.'],
+    ['HospiLogix','From ₹5,000 · per user','Module-wise pricing by hospital size (NextGen eSolutions).'],
+    ['Budget cloud HMS','₹999–15,000 / month','Softpital, Adrine, OneCity, Vikas Lite: flat plans, limited local support.'],
+    ['NIC e-Hospital','Free (public sector)','Government HMIS used by 1,000+ public hospitals; not offered to private hospitals.']
+  ];
+  const vw = $('#vendors');
+  V.forEach((v, i) => { const d = document.createElement('div'); d.className = 'vd rv' + (i%3 ? ' d'+(i%3) : ''); d.innerHTML = `<b>${v[0]}</b><div class="pr">${v[1]}</div><p>${v[2]}</p>`; vw.appendChild(d); });
+}
+
+/* ======================= audit ======================= */
+const CHECKS = [
+  ['y','Fast, lightweight site','≈19 KB page, loads in about 1 s'],
+  ['y','Mobile-ready, modern design','Clean layout and clear call to action'],
+  ['y','Appointment request with tracking','Specialty → doctor → window, private link'],
+  ['y','Doctor directory with timings','18 specialists with visiting windows'],
+  ['y','Search basics and hospital schema','Title, description, canonical, JSON-LD'],
+  ['y','Staff workspace','Appointments, visits and schedule for reception'],
+  ['p','Ayushman / PM-RAHAT mentioned','Only as "confirm with reception"'],
+  ['p','Specialities listed','One page for all; no page per speciality'],
+  ['n','Hindi version','English only, for a Hindi-speaking catchment'],
+  ['n','WhatsApp contact or booking','No WhatsApp anywhere on the site'],
+  ['n','Reviews on the site','226 Google reviews not shown'],
+  ['n','Doctor photos and bios','9 of 18 have no qualification listed'],
+  ['n','Specialty and procedure pages','Missing "neurosurgeon in Muzaffarpur"-type pages'],
+  ['n','Cashless and insurance page','No TPA or insurer list'],
+  ['n','Lab reports online','Patients have to come back or call'],
+  ['n','Online payment','No UPI or prepaid consultations'],
+  ['n','Health packages','No preventive or diagnostic packages'],
+  ['n','Emergency bar','Trauma and snakebite care not easy to find'],
+  ['n','Consistent listings','Five phone numbers and two Facebook pages']
+];
+let scored = false;
+function buildAudit(){
+  const c = $('#checks');
+  CHECKS.forEach((k, i) => { const d = document.createElement('div'); d.className = `ck ${k[0]} rv d${i%4}`; d.innerHTML = `<span class="s">${k[0]==='y'?'✓':k[0]==='p'?'~':'×'}</span><div><b>${k[1]}</b><span>${k[2]}</span></div>`; c.appendChild(d); });
+  $('#scoreMax').textContent = CHECKS.length;
+}
+function animateScore(){
+  if (scored) return; scored = true;
+  const pts = CHECKS.reduce((s, k) => s + (k[0]==='y' ? 1 : k[0]==='p' ? .5 : 0), 0), max = CHECKS.length;
+  $('#scoreArc').style.strokeDashoffset = 597 * (1 - pts/max);
+  const el = $('#scoreVal'), t0 = performance.now();
+  const step = t => { const p = Math.min(1, (t-t0)/1800); el.textContent = (pts * (1 - Math.pow(1-p,3))).toFixed(1).replace('.0',''); if (p < 1) requestAnimationFrame(step); };
+  reduce ? el.textContent = pts : requestAnimationFrame(step);
+}
+
+/* ======================= layers ======================= */
+function buildLayers(){
+  const plates = $$('.plate'), cards = $$('.lc');
+  const pick = l => { plates.forEach(p => p.classList.toggle('on', p.dataset.l == l)); cards.forEach(c => c.classList.toggle('on', c.dataset.l == l)); };
+  [...plates, ...cards].forEach(el => { el.addEventListener('mouseenter', () => pick(el.dataset.l)); el.addEventListener('click', () => pick(el.dataset.l)); });
+  pick(2);
+}
+
+/* ======================= chat ======================= */
+let chatPlayed = false;
+function playChat(){
+  if (chatPlayed) return; chatPlayed = true;
+  const msgs = $$('#wa .msg'), typing = $('#typing');
+  if (reduce) { msgs.forEach(m => m.classList.add('show')); return; }
+  let t = 300;
+  msgs.forEach((m, i) => {
+    const isIn = m.classList.contains('in');
+    if (isIn) { setTimeout(() => { typing.classList.add('show'); m.before(typing); }, t); t += 900; }
+    setTimeout(() => { typing.classList.remove('show'); m.classList.add('show'); }, t);
+    t += i === 3 ? 1400 : 800;
+  });
+}
+
+/* ======================= calculator ======================= */
+const INPUTS = [
+  { id:'opd', l:'OPD visits per day', min:30, max:500, step:5, v:120, f:v => v },
+  { id:'opdTicket', l:'Average OPD ticket (consult + tests)', min:200, max:2000, step:50, v:600, f:inr },
+  { id:'ipd', l:'Admissions per month', min:30, max:1000, step:10, v:250, f:v => v },
+  { id:'ipdBill', l:'Average IPD bill', min:5000, max:80000, step:1000, v:22000, f:inr },
+  { id:'pmjay', l:'PM-JAY share of IPD billing', min:0, max:100, step:5, v:50, f:v => v + '%' },
+  { sub:'Improvement assumptions' },
+  { id:'leak', l:'Charge capture on IPD billing', min:0, max:5, step:.5, v:2, f:v => v + '%' },
+  { id:'ded', l:'PM-JAY deductions avoided', min:0, max:5, step:.5, v:2, f:v => v + ' pts' },
+  { id:'opdUp', l:'OPD uplift from reminders & recall', min:0, max:15, step:1, v:5, f:v => v + '%' },
+  { id:'adm', l:'Extra admissions from digital', min:0, max:40, step:1, v:10, f:v => v + ' / mo' }
+];
+function buildCalc(){
+  const box = $('#inputs');
+  INPUTS.forEach(s => {
+    if (s.sub) { const h = document.createElement('div'); h.className = 'sub-h'; h.textContent = s.sub; box.appendChild(h); return; }
+    const w = document.createElement('div'); w.className = 'sl';
+    w.innerHTML = `<div class="top"><label for="${s.id}">${s.l}</label><b id="${s.id}V"></b></div><input type="range" id="${s.id}" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.v}">`;
+    box.appendChild(w);
+    const inp = $('#' + s.id, w);
+    const upd = () => { $('#' + s.id + 'V').textContent = s.f(+inp.value); inp.style.setProperty('--p', ((inp.value - s.min) / (s.max - s.min) * 100) + '%'); calc(); };
+    inp.addEventListener('input', upd); s.upd = upd;
+  });
+  INPUTS.forEach(s => s.upd && s.upd());
+}
+function calc(){
+  const g = id => +($('#' + id)?.value || 0);
+  const opdRev = g('opd') * 30 * g('opdTicket'), ipdRev = g('ipd') * g('ipdBill'), pm = ipdRev * g('pmjay') / 100;
+  const pharm = ipdRev * .25;
+  const L = [
+    ['Charge capture', ipdRev * g('leak') / 100],
+    ['PM-JAY deductions', pm * g('ded') / 100],
+    ['OPD recall', opdRev * g('opdUp') / 100],
+    ['New admissions', g('adm') * g('ipdBill')],
+    ['Pharmacy expiry', pharm * .01],
+    ['DHIS incentive', Math.min(40000, Math.max(0, g('opd') * 30 + g('ipd') * 2 - 100) * 5)]
+  ];
+  const total = L.reduce((s, x) => s + x[1], 0), cost = CONFIG.monthlyInvestment, max = Math.max(...L.map(x => x[1]), 1);
+  $('#gain').textContent = lakh(total);
+  $('#gainSub').textContent = `per month · ${lakh(total * 12)} per year`;
+  $('#kBill').textContent = lakh(opdRev + ipdRev);
+  $('#kCost').textContent = lakh(cost);
+  $('#kRoi').textContent = (total / cost).toFixed(1) + '×';
+  const lv = $('#levers');
+  if (!lv.children.length) L.forEach(x => { const r = document.createElement('div'); r.className = 'lvr'; r.innerHTML = `<span>${x[0]}</span><div class="t"><i></i></div><b></b>`; lv.appendChild(r); });
+  [...lv.children].forEach((r, i) => { $('i', r).style.width = (L[i][1] / max * 100) + '%'; $('b', r).textContent = lakh(L[i][1]); });
+}
+
+/* ======================= pricing ======================= */
+function buildPricing(){
+  const w = $('#pricing');
+  CONFIG.packages.forEach((p, i) => {
+    const once = p.onceTo ? `${lakh(p.once)}–${lakh(p.onceTo).replace('₹','')}` : lakh(p.once);
+    const mo = p.monthlyTo ? `${inr(p.monthly)}–${inr(p.monthlyTo).replace('₹','')}` : inr(p.monthly);
+    const d = document.createElement('div'); d.className = 'pc rv' + (i ? ' d'+i : '');
+    d.innerHTML = `<span class="k">${p.k}</span><h3>${p.name}</h3><p class="d">${p.d}</p><div class="price">${once} <small>one-time</small></div><div class="mo">${mo} ${p.monthlyNote}</div><ul>${p.items.map(x => `<li>${x}</li>`).join('')}</ul>`;
+    w.appendChild(d);
+  });
+  $('#bundlePrice').innerHTML = `<b>${CONFIG.bundle.once}</b><span>one-time · ${CONFIG.bundle.monthly}</span>`;
+}
+
+let io2;
+
+/* ======================= 3D stage ======================= */
+async function startStage(){
+  const stage = $('#stage');
+  let T;
+  try { T = await import('../assets/vendor/three.min.js'); } catch (e) { stage.classList.add('flat'); return; }
+  const canvas = $('#gl');
+  let renderer;
+  try { renderer = new T.WebGLRenderer({ canvas, antialias:false, alpha:true, powerPreference:'high-performance' }); }
+  catch (e) { stage.classList.add('flat'); return; }
+  const DPR = Math.min(devicePixelRatio || 1, 1.75);
+  renderer.setPixelRatio(DPR);
+  const scene = new T.Scene(), camera = new T.PerspectiveCamera(40, 1, .1, 100);
+  camera.position.set(0, 0, 7.2);
+  const N = innerWidth < 700 ? 4200 : 7000;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+
+  // ---- shape generators (each returns Float32Array N*3) ----
+  const gen = {
+    cross(){ const p = new Float32Array(N*3); for (let i=0;i<N;i++){ let x,y,z; const v = Math.random() < .5;
+      const W = v ? .62 : 2.2, H = v ? 2.2 : .62, D = .55;
+      x = rnd(-W/2, W/2); y = rnd(-H/2, H/2); z = rnd(-D/2, D/2);
+      if (Math.random() < .72){ const f = Math.floor(Math.random()*3); if (f===0) z = Math.sign(z||1)*D/2; else if (f===1) x = Math.sign(x||1)*W/2; else y = Math.sign(y||1)*H/2; }
+      if (Math.abs(x) < .31 && Math.abs(y) < .31 && Math.random() < .5) z = Math.sign(z||1)*D/2;
+      p.set([x*1.05, y*1.05, z], i*3); } return p; },
+    sphere(){ const p = new Float32Array(N*3); for (let i=0;i<N;i++){ const ring = Math.random() < .22; let x,y,z;
+      if (ring){ const a = rnd(0, Math.PI*2), r = 2.35 + rnd(-.03,.03), tilt = .35; x = r*Math.cos(a); y = r*Math.sin(a)*Math.sin(tilt); z = r*Math.sin(a)*Math.cos(tilt); }
+      else { const u = rnd(-1,1), a = rnd(0, Math.PI*2), r = 1.55 * (Math.random() < .85 ? 1 : rnd(.4,1)); const s = Math.sqrt(1-u*u); x = r*s*Math.cos(a); y = r*u; z = r*s*Math.sin(a); }
+      p.set([x,y,z], i*3); } return p; },
+    helix(){ const p = new Float32Array(N*3); for (let i=0;i<N;i++){ const t = rnd(-1,1), a = t*Math.PI*3.2, R = .85; let x,y=t*2.3,z;
+      const k = Math.random();
+      if (k < .4){ x = R*Math.cos(a); z = R*Math.sin(a); }
+      else if (k < .8){ x = R*Math.cos(a+Math.PI); z = R*Math.sin(a+Math.PI); }
+      else { const s = rnd(-1,1); x = R*s*Math.cos(a); z = R*s*Math.sin(a); const tt = Math.round(t*14)/14; y = tt*2.3; const aa = tt*Math.PI*3.2; x = R*s*Math.cos(aa); z = R*s*Math.sin(aa); }
+      p.set([x+rnd(-.03,.03), y, z+rnd(-.03,.03)], i*3); } return p; },
+    bars(){ const p = new Float32Array(N*3); const hs = [.7,1.0,1.3,1.15,1.7,2.1,2.7]; for (let i=0;i<N;i++){ const b = Math.floor(Math.random()*hs.length), h = hs[b];
+      const x0 = -1.95 + b*.65; let x = x0 + rnd(-.2,.2), y = -1.4 + rnd(0, h), z = rnd(-.2,.2);
+      if (Math.random() < .6){ const f = Math.floor(Math.random()*3); if (f===0) x = x0 + Math.sign(x-x0||1)*.2; else if (f===1) z = Math.sign(z||1)*.2; else y = -1.4 + h; }
+      p.set([x,y,z], i*3); } return p; },
+    shield(){ const p = new Float32Array(N*3); for (let i=0;i<N;i++){ const u = rnd(-1,1), v = rnd(0,1); let x,y,z;
+      y = 1.3 - v*2.7; const w = y > -.2 ? 1.45 : 1.45 * Math.sqrt(Math.max(0, 1 - Math.pow((-.2 - y)/1.25, 2))); x = u*w; z = .25*Math.cos(u*Math.PI/2) * (Math.random()<.7?1:rnd(-1,1));
+      if (Math.random() < .35){ const t = rnd(0,1); if (Math.random()<.5){ x = -.55 + t*.45; y = -.05 - t*.45; } else { x = -.1 + t*.85; y = -.5 + t*.95; } z = .32 + rnd(-.04,.04); }
+      p.set([x,y,z], i*3); } return p; },
+    ring(){ const p = new Float32Array(N*3); for (let i=0;i<N;i++){ const a = rnd(0, Math.PI*2), tube = rnd(0, Math.PI*2), R = 1.7, r = .32*Math.sqrt(Math.random());
+      p.set([(R + r*Math.cos(tube))*Math.cos(a), (R + r*Math.cos(tube))*Math.sin(a), r*Math.sin(tube)], i*3); } return p; }
+  };
+  const shapes = {}; for (const k in gen) shapes[k] = gen[k]();
+
+  const geo = new T.BufferGeometry();
+  const pos = new Float32Array(N*3), col = new Float32Array(N*3), size = new Float32Array(N), seed = new Float32Array(N);
+  const cA = new T.Color('#6fe3c1'), cB = new T.Color('#d4f27a'), cW = new T.Color('#eef3ea'), tmp = new T.Color();
+  for (let i=0;i<N;i++){
+    pos[i*3] = rnd(-6,6); pos[i*3+1] = rnd(-4,4); pos[i*3+2] = rnd(-4,2);
+    const r = Math.random(); tmp.copy(cA).lerp(cB, Math.random()); if (r > .92) tmp.copy(cW);
+    col.set([tmp.r, tmp.g, tmp.b], i*3); size[i] = r > .97 ? rnd(2.2,3.2) : rnd(.7,1.6); seed[i] = Math.random();
+  }
+  geo.setAttribute('position', new T.BufferAttribute(pos, 3));
+  geo.setAttribute('aColor', new T.BufferAttribute(col, 3));
+  geo.setAttribute('aSize', new T.BufferAttribute(size, 1));
+  geo.setAttribute('aSeed', new T.BufferAttribute(seed, 1));
+  const mat = new T.ShaderMaterial({
+    transparent:true, depthWrite:false, blending:T.AdditiveBlending,
+    uniforms:{ uTime:{ value:0 }, uPx:{ value:DPR }, uOp:{ value:1 } },
+    vertexShader:`attribute vec3 aColor;attribute float aSize;attribute float aSeed;uniform float uTime;uniform float uPx;varying vec3 vC;varying float vA;
+      void main(){vec3 p=position;float s=aSeed*6.2831;p+=0.025*vec3(sin(uTime*.9+s),cos(uTime*.7+s*2.),sin(uTime*.6+s*3.));
+      vec4 mv=modelViewMatrix*vec4(p,1.);gl_Position=projectionMatrix*mv;gl_PointSize=aSize*uPx*(19./-mv.z);
+      vC=aColor;vA=.55+.45*sin(uTime*1.3+aSeed*40.);}`,
+    fragmentShader:`uniform float uOp;varying vec3 vC;varying float vA;void main(){vec2 c=gl_PointCoord-.5;float d=length(c);if(d>.5)discard;float a=smoothstep(.5,0.,d);gl_FragColor=vec4(vC,a*a*vA*.85*uOp);}`
+  });
+  const pts = new T.Points(geo, mat);
+  const group = new T.Group(); group.add(pts); scene.add(group);
+
+  let target = shapes.cross, side = 1, sideX = 2.0, opTarget = 1, mx = 0, my = 0;
+  const resize = () => { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); sideX = w < 900 ? 0 : 2.1; };
+  addEventListener('resize', resize); resize();
+  addEventListener('pointermove', e => { mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5; }, { passive:true });
+
+  const secObs = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const s = e.target.dataset; target = shapes[s.shape] || shapes.sphere;
+    side = s.side === 'left' ? -1 : s.side === 'center' ? 0 : 1;
+    opTarget = s.dim === '1' ? (innerWidth < 900 ? .28 : .5) : 1;
+  }), { rootMargin:'-40% 0px -55% 0px' });
+  $$('main section[data-shape]').forEach(s => secObs.observe(s));
+
+  let t = 0, last = performance.now(), visible = true;
+  document.addEventListener('visibilitychange', () => { visible = !document.hidden; if (visible) { last = performance.now(); requestAnimationFrame(loop); } });
+  function loop(now){
+    if (!visible) return;
+    const dt = Math.min(.05, (now - last) / 1000); last = now; t += dt;
+    const k = reduce ? 1 : 1 - Math.pow(.02, dt);       // frame-rate independent easing
+    const a = geo.attributes.position.array;
+    for (let i = 0; i < a.length; i++) a[i] += (target[i] - a[i]) * k * (0.6 + (i % 7) * .06);
+    geo.attributes.position.needsUpdate = true;
+    mat.uniforms.uTime.value = t;
+    mat.uniforms.uOp.value += (opTarget - mat.uniforms.uOp.value) * k;
+    group.position.x += (side * sideX - group.position.x) * k * .8;
+    group.rotation.y += ((reduce ? 0 : t * .18) + mx * .6 - group.rotation.y) * .05;
+    group.rotation.x += (my * .35 + .12 - group.rotation.x) * .05;
+    renderer.render(scene, camera);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+}
+
+/* ======================= boot ======================= */
+buildEco(); buildMarket(); buildAudit(); buildLayers(); buildCalc(); buildPricing();
+io2 = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { $$('.nav-links a').forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + e.target.id)); } }), { rootMargin:'-45% 0px -50% 0px' });
+$$('main section').forEach(s => io2.observe(s));
+observeAll();
+startStage();
+</script>
+</body>
+</html>
