@@ -60,6 +60,7 @@
   --r:20px;--max:1140px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background .5s,color .5s}
 a{color:inherit}
@@ -395,6 +396,28 @@ details.costs[open] summary::after{content:"−"}
 .ctable td.num{font-family:var(--mono);white-space:nowrap;color:var(--ink)}
 .ctable .tag{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:999px;background:var(--fill-soft);color:var(--accent);font-weight:700;white-space:nowrap}
 .terms{margin-top:14px;font-size:13.5px;color:var(--muted)}
+.lock{padding:clamp(26px,4vw,44px);display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start;border:1.5px dashed color-mix(in srgb,var(--accent) 45%,transparent)}
+.lock-ico{width:64px;height:64px;border-radius:18px;background:var(--fill);display:grid;place-items:center}
+.lock-ico svg,.relock svg{width:30px;height:30px;stroke:var(--on-fill);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lock .k{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;font-weight:600}
+.lock h3{margin:8px 0 8px;font-size:clamp(24px,2.6vw,32px)}
+.lock p{color:var(--ink2);font-size:15.5px;max-width:58ch}
+.lock-chips{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+.lock-chips span{font-size:13.5px;font-weight:600;padding:7px 12px;border-radius:999px;background:var(--surface-2);color:var(--ink)}
+.unlock{display:flex;gap:10px;flex-wrap:wrap;max-width:480px}
+.unlock input{flex:1 1 220px;font:500 16px var(--sans);padding:13px 16px;border-radius:999px;border:1.5px solid var(--line2);background:var(--surface);color:var(--ink);outline:none}
+.unlock input:focus{border-color:var(--accent)}
+.unlock input::placeholder{color:var(--muted)}
+.lock-msg{margin-top:10px;font-size:14px;min-height:1.4em}
+.lock-msg.err{color:var(--bad);font-weight:600}
+.lock.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.relock{display:flex;justify-content:flex-end;margin-bottom:12px}
+.relock .btn{padding:9px 15px;font-size:13.5px}
+.relock svg{width:16px;height:16px;stroke:currentColor}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.kpi.locked b{color:var(--muted)}
+@media(max-width:600px){.lock{grid-template-columns:1fr}}
 
 /* work */
 .about-top{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:30px}
@@ -734,6 +757,23 @@ footer .fine{font-size:13px;color:var(--muted);line-height:1.6}
       <h2 class="rv d1">Clear prices. <em>Security included.</em></h2>
       <p class="lead rv d2">Every monthly fee covers secure hosting in India, encrypted storage, backups, monitoring and support, with no hidden extras. Software licences and WhatsApp message charges are passed through at cost.</p>
     </div>
+    <div class="lock card rv" id="lockPanel">
+      <div class="lock-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/><circle cx="12" cy="15.5" r="1.4"/></svg></div>
+      <div class="lock-body">
+        <span class="k">Pricing is locked</span>
+        <h3>Prices are shared in person.</h3>
+        <p>Four parts, each with a one-time set-up fee and a monthly fee that includes secure hosting, backups and support.</p>
+        <div class="lock-chips"><span>Digital Front Door</span><span>Digital Hospital Core</span><span>AI Co-pilot</span><span>Security &amp; Compliance Shield</span></div>
+        <form id="unlockForm" class="unlock" autocomplete="off">
+          <label for="pw" class="sr">Password</label>
+          <input id="pw" type="password" placeholder="Enter password" autocomplete="current-password" required>
+          <button class="btn primary" type="submit" id="unlockBtn">Unlock prices</button>
+        </form>
+        <p class="lock-msg" id="lockMsg" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+    <div id="priceBody" hidden>
+    <div class="relock"><button type="button" class="btn" id="relockBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Lock prices again</button></div>
     <div class="pricing" id="pricing"></div>
     <div class="shield-pack card rv" id="shieldPack"></div>
     <div class="bundle rv" id="bundle"></div>
@@ -742,6 +782,7 @@ footer .fine{font-size:13px;color:var(--muted);line-height:1.6}
       <div class="ctable"><table id="costTable"></table></div>
     </details>
     <p class="terms">Suggested terms: 40% at start, 40% at go-live, 20% after 30 days of support. Monthly fees start after go-live. GST extra. Prices are valid for 60 days and are fixed after the discovery week.</p>
+    </div>
   </div>
 </section>
 
@@ -805,40 +846,11 @@ footer .fine{font-size:13px;color:var(--muted);line-height:1.6}
 
 <script>
 /* ======================= CONFIG (edit prices here) ======================= */
-const CONFIG = {
-  packages: [
-    { k:'PACKAGE A', name:'Digital Front Door', d:'Turns reputation into bookings. Live in 2–4 weeks.', once:85000, monthly:14999,
-      inc:'Includes hosting, encrypted report storage, backups and the WhatsApp platform',
-      items:['Bilingual website with 20+ speciality pages','Doctor profiles, reviews, cashless page','WhatsApp booking, reminders and reports','Google profile and listing clean-up','Review requests at discharge'] },
-    { k:'PACKAGE B', name:'Digital Hospital Core', d:'ABDM-compliant hospital software, implemented properly.', once:175000, onceTo:250000, monthly:12999,
-      inc:'Includes secure integration hub, India-region data store, point-in-time backups and support · HMIS licence at cost',
-      items:['HMIS audit or vendor selection','Set-up, data migration, staff training','Staff logins, roles and audit logs','ABHA M1/M2 and PM-JAY desk','Connected to WhatsApp and website'] },
-    { k:'PACKAGE C', name:'AI Co-pilot', d:'Doctors save time and claims go in complete.', once:60000, monthly:24999,
-      inc:'Includes AI and speech-to-text usage (fair use about 6,000 AI tasks a month) and privacy masking',
-      items:['Hindi voice to prescription','AI discharge-summary drafts','PM-JAY claim document checker','Lab report explainer on WhatsApp','Owner dashboard and nightly digest'] }
-  ],
-  shield: { k:'REQUIRED WITH EVERY PACKAGE', name:'Security & Compliance Shield', d:'Patient data protection and DPDP compliance, verified by an independent tester.', once:75000, monthly:7999,
-    items:['Security test (VAPT) by a CERT-In-empanelled firm before go-live, then yearly','DPDP consent forms and privacy notice in Hindi and English','Data-processing agreement and breach response plan','Monitoring, 1-year audit logs, quarterly restore drill and access review'] },
-  bundle: { once:'₹3.6–4.2 lakh', monthly:'₹54,999 / month', note:'All four parts, about 10% off the separate prices. AI co-pilot free for the first two months.' },
-  bundleMonthly: 54999,
-  licenceEstimate: 25000,   // HMIS licence estimate for the calculator (passed through at cost)
-  messagesEstimate: 1500,   // Meta WhatsApp message charges estimate
-  costs: [
-    ['Cloud database, India region','Managed Postgres in Mumbai, encrypted at rest, dedicated compute','₹6,000–9,000','Included'],
-    ['Point-in-time recovery','Restore the database to any second in the last 7 days','≈ ₹8,500','Included'],
-    ['Encrypted file storage','Reports, scans and PDFs in private storage with time-limited links (about 100 GB)','₹500–1,500','Included'],
-    ['Off-site encrypted backup','Daily copy to a separate account, kept for 30 days','₹500–1,000','Included'],
-    ['App hosting','India-region servers, firewall, SSL certificates, domain','₹2,000–3,000','Included'],
-    ['Monitoring and logs','Uptime alerts, error tracking, 1-year audit log retention','₹1,500–2,500','Included'],
-    ['WhatsApp platform','Approved business number, templates, chatbot','₹2,500–3,500','Included'],
-    ['AI and speech-to-text','Language models and Hindi speech, with zero data retention','₹3,000–8,000','Included'],
-    ['SMS / OTP logins','Two-step sign-in for staff','₹500–1,000','Included'],
-    ['Support and updates','Fixes, updates, small changes, monthly review call','—','Included'],
-    ['HMIS licence','Paid to the chosen certified vendor (market range ₹15–40k a month)','At cost','Pass-through'],
-    ['WhatsApp message charges','Meta rate: about ₹0.12 per reminder or report, ₹0.86 per promotion','At cost','Pass-through'],
-    ['Hardware','PCs, printers and network, only if needed; we specify, you buy locally','One-time','Pass-through']
-  ]
-};
+/* ======================= PRICING (encrypted) =======================
+ Prices are AES-256-GCM encrypted (PBKDF2-SHA256 key). They are not readable in this file.
+ To change prices: edit pricing.json privately, run encrypt.mjs, paste the output here. */
+const LOCKED_PRICING = {"v":1,"iter":310000,"salt":"3yQ0+Q5NkBIkf9u3ny4SZQ==","iv":"wmR4tG0eIY4CGXZ2","ct":"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"};
+let CONFIG = null;
 
 /* ======================= helpers ======================= */
 const $ = (s, r=document) => r.querySelector(s);
@@ -1031,12 +1043,15 @@ function calc(){
     ['Pharmacy expiry', ipdRev * .25 * .01],
     ['DHIS incentive', Math.min(40000, Math.max(0, g('opd') * 30 + g('ipd') * 2 - 100) * 5)]
   ];
-  const total = L.reduce((s, x) => s + x[1], 0), cost = CONFIG.bundleMonthly + CONFIG.licenceEstimate + CONFIG.messagesEstimate, max = Math.max(...L.map(x => x[1]), 1);
+  const total = L.reduce((s, x) => s + x[1], 0), max = Math.max(...L.map(x => x[1]), 1);
   $('#gain').textContent = lakh(total);
   $('#gainSub').textContent = `per month · ${lakh(total * 12)} per year`;
   $('#kBill').textContent = lakh(opdRev + ipdRev);
-  $('#kCost').textContent = lakh(cost);
-  $('#kRoi').textContent = (total / cost).toFixed(1) + '×';
+  if (CONFIG) {
+    const cost = CONFIG.bundleMonthly + CONFIG.licenceEstimate + CONFIG.messagesEstimate;
+    $('#kCost').textContent = lakh(cost); $('#kRoi').textContent = (total / cost).toFixed(1) + '×';
+  } else { $('#kCost').textContent = '🔒 Locked'; $('#kRoi').textContent = '🔒 Locked'; }
+  $('#kCost').parentElement.classList.toggle('locked', !CONFIG); $('#kRoi').parentElement.classList.toggle('locked', !CONFIG);
   const lv = $('#levers');
   if (!lv.children.length) L.forEach(x => { const r = document.createElement('div'); r.className = 'lvr'; r.innerHTML = `<span>${x[0]}</span><div class="t"><i></i></div><b></b>`; lv.appendChild(r); });
   [...lv.children].forEach((r, i) => { $('i', r).style.width = (L[i][1] / max * 100) + '%'; $('b', r).textContent = lakh(L[i][1]); });
@@ -1044,6 +1059,7 @@ function calc(){
 
 /* ======================= pricing ======================= */
 function buildPricing(){
+  $('#pricing').innerHTML = '';
   CONFIG.packages.forEach((p, i) => {
     const once = p.onceTo ? `${lakh(p.once)}–${lakh(p.onceTo).replace('₹','')}` : lakh(p.once);
     const d = document.createElement('div'); d.className = 'pc card rv' + (i ? ' d'+i : '');
@@ -1183,7 +1199,45 @@ async function startStage(){
 }
 
 /* ======================= boot ======================= */
-buildEco(); buildMarket(); buildAudit(); buildLayers(); buildCalc(); buildPricing(); buildWork();
+buildEco(); buildMarket(); buildAudit(); buildLayers(); buildCalc(); buildWork();
+
+/* ======================= pricing lock ======================= */
+const b64u8 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function decryptPricing(password){
+  const L = LOCKED_PRICING, enc = new TextEncoder();
+  const base = await crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey({ name:'PBKDF2', salt:b64u8(L.salt), iterations:L.iter, hash:'SHA-256' }, base, { name:'AES-GCM', length:256 }, false, ['decrypt']);
+  const pt = await crypto.subtle.decrypt({ name:'AES-GCM', iv:b64u8(L.iv) }, key, b64u8(L.ct));
+  return JSON.parse(new TextDecoder().decode(pt));
+}
+function showPricing(cfg){
+  CONFIG = cfg; buildPricing(); calc();
+  $('#lockPanel').hidden = true; $('#priceBody').hidden = false;
+  $$('#priceBody .rv').forEach(el => el.classList.add('in'));
+}
+function lockPricing(){
+  CONFIG = null; try { sessionStorage.removeItem('itm-pricing'); } catch (e) {}
+  $('#priceBody').hidden = true; $('#lockPanel').hidden = false;
+  $('#pricing').innerHTML = $('#shieldPack').innerHTML = $('#bundle').innerHTML = $('#costTable').innerHTML = '';
+  $('#pw').value = ''; $('#lockMsg').textContent = ''; calc();
+}
+$('#unlockForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  const msg = $('#lockMsg'), btn = $('#unlockBtn'), panel = $('#lockPanel');
+  if (!window.crypto || !crypto.subtle) { msg.className = 'lock-msg err'; msg.textContent = 'This browser cannot unlock the prices. Please open the page over https in a modern browser.'; return; }
+  btn.disabled = true; msg.className = 'lock-msg'; msg.textContent = 'Checking…';
+  try {
+    const cfg = await decryptPricing($('#pw').value);
+    try { sessionStorage.setItem('itm-pricing', JSON.stringify(cfg)); } catch (e2) {}
+    msg.textContent = ''; showPricing(cfg);
+  } catch (err) {
+    msg.className = 'lock-msg err'; msg.textContent = 'That password is not right. Please try again.';
+    panel.classList.remove('shake'); void panel.offsetWidth; panel.classList.add('shake'); $('#pw').select();
+  } finally { btn.disabled = false; }
+});
+$('#relockBtn').addEventListener('click', () => { lockPricing(); $('#investment').scrollIntoView({ behavior:'smooth' }); });
+try { const saved = sessionStorage.getItem('itm-pricing'); if (saved) showPricing(JSON.parse(saved)); } catch (e) {}
+calc();
 $$('.rv, #range, #road, #stack, #shield').forEach(el => io.observe(el));
 startStage();
 </script>
