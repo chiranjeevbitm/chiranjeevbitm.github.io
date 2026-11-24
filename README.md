@@ -20,7 +20,7 @@ the first commands.
 |---|---|---|
 | Arogya Rx website | https://chiranjeevbitm.github.io/arogya-rx/ | Bilingual landing page with the clickable clinic app (sample data) |
 | Arogya Rx clinic demo | https://chiranjeevbitm.github.io/arogya-rx/demo/ | Interactive pitch demo: OPD queue, prescriptions, intake, letterhead, pricing |
-| I.T. Memorial Hospital pitch | https://chiranjeevbitm.github.io/it-memorial-hospital/ | Animated proposal (three.js): ABDM-compliant HMIS, WhatsApp and Google growth, AI co-pilot, ROI calculator, pricing |
+| I.T. Memorial Hospital pitch | https://chiranjeevbitm.github.io/it-memorial-hospital/ | Animated proposal (three.js) with light, warm and dark themes: ABDM-compliant HMIS, patient data security, WhatsApp and Google growth, AI co-pilot, ROI calculator, pricing and healthcare portfolio |
 
 ## Adding more pages
 
