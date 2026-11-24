@@ -44,10 +44,10 @@ main,header,footer{position:relative;z-index:2}
 .brand b{font-weight:700;font-size:15px;letter-spacing:.01em;display:block;line-height:1.1}
 .brand small{font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
 .nav-links{display:flex;gap:4px}
-.nav-links a{font-size:13.5px;color:var(--ink2);text-decoration:none;padding:8px 12px;border-radius:999px;transition:background .25s,color .25s}
+.nav-links a{white-space:nowrap;font-size:13.5px;color:var(--ink2);text-decoration:none;padding:8px 12px;border-radius:999px;transition:background .25s,color .25s}
 .nav-links a:hover,.nav-links a.on{background:var(--card2);color:var(--ink)}
 .nav-cta{font-size:13.5px;font-weight:700;text-decoration:none;background:var(--lime);color:#0b1d17;padding:10px 16px;border-radius:999px}
-@media(max-width:1020px){.nav-links{display:none}}
+@media(max-width:1200px){.nav-links{display:none}}
 @media(max-width:560px){.brand small{display:none}.nav-cta{padding:9px 13px;font-size:12.5px}.brand b{font-size:14px}}
 
 /* ---------- progress ---------- */
@@ -1105,7 +1105,7 @@ async function startStage(){
     mat.uniforms.uTime.value = t;
     mat.uniforms.uOp.value += (opTarget - mat.uniforms.uOp.value) * k;
     group.position.x += (side * sideX - group.position.x) * k * .8;
-    group.rotation.y += ((reduce ? 0 : t * .18) + mx * .6 - group.rotation.y) * .05;
+    group.rotation.y += ((reduce ? 0 : Math.sin(t * .35) * .55) + mx * .6 - group.rotation.y) * .05;
     group.rotation.x += (my * .35 + .12 - group.rotation.x) * .05;
     renderer.render(scene, camera);
     requestAnimationFrame(loop);
